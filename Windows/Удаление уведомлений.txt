@@ -1,0 +1,3 @@
+gpedit.msc
+Computer Configuration -> Administrative Templates -> Windows Components -> Wundows Security -> Notifications
+Открыть Hide all notifications -> Enabled

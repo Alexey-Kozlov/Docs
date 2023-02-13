@@ -1,0 +1,100 @@
+1. Копируем куки : из C:\Windows\System32\config\systemprofile\.erlang.cookie в C:\Users\admin\.erlang.cookie
+2. Создаем системные переменные:
+- открываем окно редактирования сист.переменных - поиск -> env -> "Edit system environment variables"
+- в PATH добавляем - %RABBITMQ_SERVER%\sbin
+- в System Variables добавляем:
+	ERLANG_HOME -> C:\Program Files\Erlang OTP
+	RABBITMQ_BASE -> C:\Program Files\RabbitMQ Server
+	RABBITMQ_SERVER -> C:\Program Files\RabbitMQ Server\rabbitmq_server-3.11.5
+3. перегружаем
+4. открываем командную консоль rabbit в админском режиме
+- выпллняем -> rabbitmqctl status
+если будет куча слов и в конце список интерфейсов - порядок, все запустилось корректно, на это все.
+
+если будет типа - werlang запущен, но сервер нет и вывод диагностики - начинаем шаманить.
+- удаляем сервис командой - rabbitmq-service remove
+- удаляем папку C:\Users\admin\AppData\Roaming\RabbitMQ
+- удаляем из реестра -> Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Ericsson\Erlang\ErlSrv\1.1\RabbitMQ
+- снова создаем сервис -> rabbitmq-service install
+- активируем -> rabbitmq-service enable
+- устанавливаем плагин -> rabbitmq-plugins enable rabbitmq_management
+- запускаем сервис - rabbitmq-service start
+- ждем слегка
+- проверяем - rabbitmqctl status -> должно теперь работать
+- проверяем также порт в Resource manager - на процессе erl.exe должен быть открытый порт 5672
+- если снова нет - попробовать запустить сервис командой -> rabbitmq_server start -detached
+
+- остановка сервиса - rabbitmqctl stop_app
+- запуск сервиса - rabbitmqctl start_app
+- веб-адрес админки - http://localhost:15672
+- адрес самого сервиса  - localhost по порту 5672
+
+--------------------------------------------------------------
+Запуск через SSL и подключение https
+
+1. Делаем из сертификата р12 публичный и приватный ключи.
+- Подключаем openssl в системный переменные - из гита по адресу - C:\Program Files\Git\usr\bin
+- приватный ключ - openssl pkcs12 -in yourP12File.pfx -nocerts -out privateKey.pem
+- публичный ключ (сертификат) - openssl pkcs12 -in yourP12File.pfx -clcerts -nokeys -out publicCert.pem
+при извлечении потребуется пароль для р12
+полученные файлы копируем к файлу р12
+
+2. Создаем файл конфигурации в C:\Users\admin\AppData\Roaming\RabbitMQ -> rabbitmq.conf
+В него пишем - 
+
+listeners.ssl.default = 5671
+ssl_options.cacertfile = d:\\Certificates\\publicCert.pem
+ssl_options.certfile   = d:\\Certificates\\publicCert.pem
+ssl_options.keyfile    = d:\\Certificates\\privatekey.pem
+ssl_options.password   = gjkjcfnbrA1$
+
+management.ssl.port       = 15671
+management.ssl.cacertfile = d:\\Certificates\\publicCert.pem
+management.ssl.certfile   = d:\\Certificates\\publicCert.pem
+management.ssl.keyfile    = d:\\Certificates\\privatekey.pem
+management.ssl.password   = gjkjcfnbrA1$
+
+management.ssl.honor_cipher_order   = true
+management.ssl.honor_ecc_order      = true
+management.ssl.client_renegotiation = false
+management.ssl.secure_renegotiate   = true
+
+management.ssl.versions.1 = tlsv1.2
+management.ssl.versions.2 = tlsv1.1
+
+management.ssl.ciphers.1 = ECDHE-ECDSA-AES256-GCM-SHA384
+management.ssl.ciphers.2 = ECDHE-RSA-AES256-GCM-SHA384
+management.ssl.ciphers.3 = ECDHE-ECDSA-AES256-SHA384
+management.ssl.ciphers.4 = ECDHE-RSA-AES256-SHA384
+management.ssl.ciphers.5 = ECDH-ECDSA-AES256-GCM-SHA384
+management.ssl.ciphers.6 = ECDH-RSA-AES256-GCM-SHA384
+management.ssl.ciphers.7 = ECDH-ECDSA-AES256-SHA384
+management.ssl.ciphers.8 = ECDH-RSA-AES256-SHA384
+management.ssl.ciphers.9 = DHE-RSA-AES256-GCM-SHA384
+
+3. перезапускаем сервис:
+rabbitmqctl stop_app
+rabbitmqctl start_app
+rabbitmqctl status
+
+В конце должно быть такая картина:
+Interface: [::], port: 15671, protocol: https, purpose: HTTP API over TLS (HTTPS)
+Interface: [::], port: 25672, protocol: clustering, purpose: inter-node and CLI tool communication
+Interface: [::], port: 5672, protocol: amqp, purpose: AMQP 0-9-1 and AMQP 1.0
+Interface: 0.0.0.0, port: 5672, protocol: amqp, purpose: AMQP 0-9-1 and AMQP 1.0
+Interface: [::], port: 5671, protocol: amqp/ssl, purpose: AMQP 0-9-1 and AMQP 1.0 over TLS
+Interface: 0.0.0.0, port: 5671, protocol: amqp/ssl, purpose: AMQP 0-9-1 and AMQP 1.0 over TLS
+
+проверяем :  https://192.168.1.10:15671  <-должна открыться админка по https
+
+
+4. Конфигурация клиента:
+
+            var factory = new ConnectionFactory();
+            factory.UserName= "admin";
+            factory.Password = "admin";
+            factory.VirtualHost = "/";
+            factory.Port = 5671;
+            factory.Ssl.CertPath = @"d:\Certificates\publicCert.pem";
+            factory.Ssl.Enabled = true;
+            factory.Ssl.ServerName = "192.168.1.10";
