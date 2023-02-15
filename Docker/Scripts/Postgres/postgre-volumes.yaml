@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/run/desktop/mnt/host/D/Docker/Volumes/Postgres"
+    path: "/run/desktop/mnt/host/C/Docker"
     type: DirectoryOrCreate
 ---
 apiVersion: v1

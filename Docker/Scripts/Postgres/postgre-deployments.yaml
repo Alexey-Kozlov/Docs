@@ -56,9 +56,9 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
- name: postgre
+ name: postgre-service
  labels:
-  app: postgre
+   app: postgre-service
 spec:
  selector:
   app: postgre

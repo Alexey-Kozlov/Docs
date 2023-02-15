@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: api
+spec:
+ replicas: 2
+ selector:
+  matchLabels:
+   component: api
+ template:
+  metadata:
+   labels:
+    component: api
+  spec:
+   containers:
+    - name: api
+      image: kozlovas/reactivities-api
+      ports:
+       - containerPort: 5001
+      env:
+       - name: ASPNETCORE_URLS
+         value: "http://+:5001"
+       - name: ConnectionStrings__DefaultConnection
+         value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=activities;SearchPath=public"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: api-cluster-ip-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 5001
+    targetPort: 5001
+ selector:
+  component: api

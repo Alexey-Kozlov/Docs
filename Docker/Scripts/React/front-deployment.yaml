@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: front
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: front
+ template:
+  metadata:
+   labels:
+    component: front
+  spec:
+   containers:
+    - name: front
+      image: kozlovas/reactivities-front
+      ports:
+       - containerPort: 80
+      env:
+       - name: REACT_APP_API_URL
+         value: "/api"
+       - name: REACT_APP_CHAT_URL
+         value: "/chat"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: front-cluster-ip-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 80
+    targetPort: 80
+ selector:
+  component: front
