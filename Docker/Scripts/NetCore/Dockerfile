@@ -2,6 +2,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 5001
 
+ENV RABBIT_SERVICE_NAME=""
+ENV RABBIT_QUEUE_NAME=""
+ENV RABBIT_SERVICE_PORT=0
+
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["API/API.csproj", "API/"]
