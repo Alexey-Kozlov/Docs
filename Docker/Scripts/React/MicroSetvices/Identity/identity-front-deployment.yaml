@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: ms-identity-front
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: ms-identity-front
+ template:
+  metadata:
+   labels:
+    component: ms-identity-front
+  spec:
+   containers:
+    - name: ms-identity-front
+      image: kozlovas/ms-identity-front
+      ports:
+       - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ms-identity-front-cluster-ip-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 80
+    targetPort: 80
+ selector:
+  component: ms-identity-front

@@ -34,3 +34,38 @@ spec:
           name: api-cluster-ip-service
           port:
            number: 5001
+      - path: /ms
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /ms/identity/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-identity-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /ms/identity/api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-identity-api-service
+          port:
+           number: 5020
+      - path: /ms/api/ms-rabbit-producer/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-rabbit-producer-service
+          port:
+           number: 5021
+      - path: /ms/api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-main-api-service
+          port:
+           number: 5022

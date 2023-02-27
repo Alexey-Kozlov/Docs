@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: ms-front
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: ms-front
+ template:
+  metadata:
+   labels:
+    component: ms-front
+  spec:
+   containers:
+    - name: ms-front
+      image: kozlovas/ms-front
+      ports:
+       - containerPort: 80
+      env:
+       - name: REACT_APP_IDENTITY
+         value: "/ms/identity"
+       - name: REACT_APP_FRONT
+         value: "/ms"
+       - name: REACT_APP_MAIN
+         value: "/ms/api"
+       - name: REACT_APP_TOKEN_NAME
+         value: "msjwt"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ms-front-cluster-ip-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 80
+    targetPort: 80
+ selector:
+  component: ms-front

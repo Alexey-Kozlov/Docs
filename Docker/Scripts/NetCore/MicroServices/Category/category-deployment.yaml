@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: ms-category-api
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: ms-category-api
+ template:
+  metadata:
+   labels:
+    component: ms-category-api
+  spec:
+   containers:
+    - name: ms-category-api
+      image: kozlovas/ms-category-api
+      ports:
+       - containerPort: 5024
+      env:
+       - name: ASPNETCORE_URLS
+         value: "http://+:5024"
+       - name: ConnectionStrings__DefaultConnection
+         value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=MicroServices;SearchPath=public"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ms-category-api-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 5024
+    targetPort: 5024
+ selector:
+  component: ms-category-api

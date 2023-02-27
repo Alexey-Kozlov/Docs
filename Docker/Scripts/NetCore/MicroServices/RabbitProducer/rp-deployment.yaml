@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: ms-rabbit-producer
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: ms-rabbit-producer
+ template:
+  metadata:
+   labels:
+    component: ms-rabbit-producer
+  spec:
+   containers:
+    - name: ms-rabbit-producer
+      image: kozlovas/ms-rabbitproducer
+      ports:
+       - containerPort: 5021
+      env:
+       - name: ASPNETCORE_URLS
+         value: "http://+:5021"
+       - name: ConnectionStrings__DefaultConnection
+         value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=MicroServicesIdentity;SearchPath=public"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ms-rabbit-producer-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 5021
+    targetPort: 5021
+ selector:
+  component: ms-rabbit-producer

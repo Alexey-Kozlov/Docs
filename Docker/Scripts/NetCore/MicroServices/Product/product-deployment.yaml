@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: ms-product-api
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: ms-product-api
+ template:
+  metadata:
+   labels:
+    component: ms-product-api
+  spec:
+   containers:
+    - name: ms-product-api
+      image: kozlovas/ms-product-api
+      ports:
+       - containerPort: 5023
+      env:
+       - name: ASPNETCORE_URLS
+         value: "http://+:5023"
+       - name: ConnectionStrings__DefaultConnection
+         value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=MicroServices;SearchPath=public"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ms-product-api-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 5023
+    targetPort: 5023
+ selector:
+  component: ms-product-api

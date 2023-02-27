@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: ms-order-api
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: ms-order-api
+ template:
+  metadata:
+   labels:
+    component: ms-order-api
+  spec:
+   containers:
+    - name: ms-order-api
+      image: kozlovas/ms-order-api
+      ports:
+       - containerPort: 5025
+      env:
+       - name: ASPNETCORE_URLS
+         value: "http://+:5025"
+       - name: ConnectionStrings__DefaultConnection
+         value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=MicroServices;SearchPath=public"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ms-order-api-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 5025
+    targetPort: 5025
+ selector:
+  component: ms-order-api
