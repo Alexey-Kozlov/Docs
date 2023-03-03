@@ -34,7 +34,7 @@ spec:
           name: api-cluster-ip-service
           port:
            number: 5001
-      - path: /ms
+      - path: /ms/?(.*)
         pathType: Prefix
         backend:
          service:
