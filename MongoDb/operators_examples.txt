@@ -1,0 +1,57 @@
+db.customers.insertOne({name:"bob",age:59})
+db.customers.insertMany([{name:"bob",age:59},{name:"anna",age:27}])
+
+db.orders.deleteOne({"_id":ObjectId("6404beee8fbf9bd3028c0cd9")})
+
+db.customers.updateOne({_id:ObjectId("6404c5b68fbf9bd3028c0cdc")},{$set:{name:"Anna",age:19}})
+
+db.orders.findOne()
+db.customers.findOne({_id:ObjectId("6404beee8fbf9bd3028c0cd9")})
+
+db.orders.aggregate([{$lookup: {from: "customers", localField:"customerid", foreignField: "_id", as: "ordersdata"}}]).pretty()
+db.customers.aggregate([{$lookup: {from: "orders", localField:"_id", foreignField: "customerid", as: "ordersdata"}}]).pretty()
+
+db.createCollection("posts",{
+	validator:{
+		$jsonSchema:{
+			bsonType:"object",
+			required:["title","text","creator","comments"],
+			properties:{
+				title:{
+					bsonType:"string",
+					description:"must be a string and is required"
+				},
+				text:{
+					bsonType:"string",
+					description:"must be a string and is required"
+				},
+				creator:{
+					bsonType:"objectId",
+					description:"must be an objectId and is required"
+				},
+				comments:{
+					bsonType:"array",
+					description:"must be an array and is required",
+					items:{
+						bsonType:"object", 
+						required:["text","author"],
+						properties:{
+							text:{
+								bsonType:"string",
+								description:"must be an objectId and is required"
+							},
+							author:{
+								bsonType:"objectId",
+								description:"must be an objectId and is required"
+							}					
+						}
+					}
+				}	
+			}
+		}
+	},
+	validationAction:'warn'
+});
+
+--меньше или равно
+db.test.find({age:{$lte:25}})

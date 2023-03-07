@@ -13,19 +13,10 @@ spec:
     component: ms-front
   spec:
    containers:
-    - name: ms-front
-      image: kozlovas/ms-front
-      ports:
-       - containerPort: 80
-      env:
-       - name: REACT_APP_IDENTITY
-         value: "/ms/identity"
-       - name: REACT_APP_FRONT
-         value: "/ms"
-       - name: REACT_APP_MAIN
-         value: "/ms/api"
-       - name: REACT_APP_TOKEN_NAME
-         value: "msjwt"
+   - name: ms-front
+     image: kozlovas/ms-front:break
+     ports:
+     - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
