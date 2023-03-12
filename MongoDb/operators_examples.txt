@@ -1,3 +1,6 @@
+show dbs
+show collections
+
 db.customers.insertOne({name:"bob",age:59})
 db.customers.insertMany([{name:"bob",age:59},{name:"anna",age:27}])
 
@@ -55,3 +58,53 @@ db.createCollection("posts",{
 
 --меньше или равно
 db.test.find({age:{$lte:25}})
+--равно
+db.test.find({age:{$eq:25}}) или db.test.find({age:25})
+--логическое OR
+db.test.find({$or:[{age:17},{age:26}]}).pretty()
+--логическое AND и OR
+db.test.find({$and:[{$or:[{age:17},{age:26}]},{"doc.docname":"word"}]}).pretty()
+--выбрать все записи, у которых есть поле "doc"
+db.test.find({doc:{$exists:true}})
+--выбрать записи по типу поля
+db.test.find({age:{$type:"number"}})
+--найти текст по regex - будут найдены все записи со словом "le"
+db.test.find({name:{$regex:/le/}})
+
+--количество записей
+db.test.find().count()
+
+const cur = db.test.find()
+cur.next()
+cur.next()
+....
+
+--есть ли еще непросмотренные элементы в курсоре
+cur.hasNext()
+--также просмотр всех записей
+cur.forEach(doc => {printjson(doc)}) - просмотр всех элементов, или просто - cur
+--сортировка
+по возрастанию - db.test.find().sort({name:1})  
+или по убыванию - db.test.find().sort({name:-1}) 
+--пропустить первые строки
+db.test.find().sort({name:1}).skip(5)
+--отобразить только первые строки
+db.test.find().sort({name:1}).limit(2)
+
+--проекции
+db.test.find({},{name:1, age:1}) - отобразить только name и age
+db.test.find({},{name:1, age:1, _id:0})  - скрыть id
+
+--план выполнения
+db.test.explain().find({name:"rebecca"})
+db.test.explain("executionStats").find({name:"rebecca"})
+db.test.explain("queryPlanner").find({name:"rebecca"})
+
+--индексы
+db.test.getIndexes()
+--создание индекса
+db.test.createIndex({"name": 1})
+db.test.createIndex({"name": 1, "age":1})
+--удаление индекса
+db.test.dropIndex({"name": 1})
+
