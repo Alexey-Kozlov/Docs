@@ -30,9 +30,8 @@ spec:
           name: postgres-vlm
     volumes:
      - name: postgres-vlm
-       hostPath:
-         path: "/run/desktop/mnt/host/c/Docker/Postgres"
-         type: DirectoryOrCreate
+       persistentVolumeClaim:
+         claimName: postgres-pvc
 ---
 apiVersion: v1
 kind: ConfigMap

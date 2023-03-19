@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: rb-api
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: rb-api
+ template:
+  metadata:
+   labels:
+    component: rb-api
+  spec:
+   containers:
+    - name: rb-api
+      image: kozlovas/rb-api
+      ports:
+       - containerPort: 5030
+      env:
+       - name: ASPNETCORE_URLS
+         value: "http://+:5030"
+       - name: ConnectionStrings__DefaultConnection
+         value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=recipebook;SearchPath=public"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: rb-api-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 5030
+    targetPort: 5030
+ selector:
+  component: rb-api

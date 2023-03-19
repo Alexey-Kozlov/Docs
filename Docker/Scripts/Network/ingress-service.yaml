@@ -70,3 +70,17 @@ spec:
           name: ms-main-api-service
           port:
            number: 5022
+      - path: /rb/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: rb-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /rb/api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: rb-api-service
+          port:
+           number: 5030

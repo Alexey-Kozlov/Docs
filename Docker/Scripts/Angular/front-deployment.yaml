@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: rb-front
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: rb-front
+ template:
+  metadata:
+   labels:
+    component: rb-front
+  spec:
+   containers:
+   - name: rb-front
+     image: kozlovas/rb-front
+     ports:
+     - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: rb-front-cluster-ip-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 80
+    targetPort: 80
+ selector:
+  component: rb-front
