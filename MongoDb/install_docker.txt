@@ -1,5 +1,6 @@
 --запускаем БД
 docker run --name mongodb -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin -p 27017:27017 -d mongo
+docker run --name mongodb -p 27017:27017 -d mongo
 
 --админка - mongoclient, лучше чем mongo-express
 docker run -p 8081:3000 --name mongoclient -d mongoclient/mongoclient
