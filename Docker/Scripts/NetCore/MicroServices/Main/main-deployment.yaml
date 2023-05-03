@@ -15,6 +15,7 @@ spec:
    containers:
     - name: ms-main-api
       image: kozlovas/ms-main-api
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 5022
       env:

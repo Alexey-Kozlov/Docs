@@ -15,6 +15,7 @@ spec:
    containers:
     - name: ms-identity-front
       image: kozlovas/ms-identity-front
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 80
 ---

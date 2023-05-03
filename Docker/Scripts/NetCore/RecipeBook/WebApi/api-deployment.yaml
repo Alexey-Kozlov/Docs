@@ -15,6 +15,7 @@ spec:
    containers:
     - name: rb-api
       image: kozlovas/rb-api
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 5030
       env:

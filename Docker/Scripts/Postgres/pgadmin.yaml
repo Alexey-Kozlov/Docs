@@ -23,6 +23,7 @@ spec:
       containers:
         - name: pgadmin4
           image: dpage/pgadmin4
+          imagePullPolicy: IfNotPresent
           env:
            - name: PGADMIN_DEFAULT_EMAIL
              value: "admin@admin.com"

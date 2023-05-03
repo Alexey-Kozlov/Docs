@@ -15,6 +15,7 @@ spec:
    containers:
     - name: ms-order-api
       image: kozlovas/ms-order-api
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 5025
       env:

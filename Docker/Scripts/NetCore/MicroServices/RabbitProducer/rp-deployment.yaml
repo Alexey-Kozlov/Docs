@@ -15,6 +15,7 @@ spec:
    containers:
     - name: ms-rabbit-producer
       image: kozlovas/ms-rabbitproducer
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 5021
       env:

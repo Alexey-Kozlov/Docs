@@ -15,6 +15,7 @@ spec:
    containers:
    - name: ms-front
      image: kozlovas/ms-front
+     imagePullPolicy: IfNotPresent
      ports:
      - containerPort: 80
 ---

@@ -15,6 +15,7 @@ spec:
    containers:
     - name: front
       image: kozlovas/reactivities-front
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 80
       env:

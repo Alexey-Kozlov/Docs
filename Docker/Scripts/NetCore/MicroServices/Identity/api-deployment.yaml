@@ -15,6 +15,7 @@ spec:
    containers:
     - name: ms-identity-api
       image: kozlovas/ms-identity-api
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 5020
       env:

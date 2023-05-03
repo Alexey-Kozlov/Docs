@@ -15,6 +15,7 @@ spec:
    containers:
     - name: ms-product-api
       image: kozlovas/ms-product-api
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 5023
       env:

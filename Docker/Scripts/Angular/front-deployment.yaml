@@ -15,6 +15,7 @@ spec:
    containers:
    - name: rb-front
      image: kozlovas/rb-front
+     imagePullPolicy: IfNotPresent
      ports:
      - containerPort: 80
 ---

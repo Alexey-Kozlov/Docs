@@ -15,6 +15,7 @@ spec:
    containers:
     - name: ms-category-api
       image: kozlovas/ms-category-api
+      imagePullPolicy: IfNotPresent
       ports:
        - containerPort: 5024
       env:
