@@ -84,3 +84,10 @@ spec:
           name: rb-api-service
           port:
            number: 5030
+      - path: /gql/monolit/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: graphql-monolit-service
+          port:
+           number: 3000

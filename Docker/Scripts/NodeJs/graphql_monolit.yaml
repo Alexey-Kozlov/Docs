@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: graphql-monolit
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: graphql-monolit
+ template:
+  metadata:
+   labels:
+    component: graphql-monolit
+  spec:
+   containers:
+    - name: graphql-monolit
+      image: kozlovas/graphql_monolit
+      imagePullPolicy: IfNotPresent
+      ports:
+       - containerPort: 3000
+      env:
+       - name: APP_PORT
+         value: "3000"
+       - name: MONGODB_URL
+         value: "mongodb://mongodb-service:27017/NodeGraphQL"
+       - name: EMAIL
+         value: ""
+       - name: EMAIL_PASSWORD
+         value: ""
+       - name: ITEMS_PER_PAGE
+         value: "3"
+       - name: URL_PREFIX
+         value: "/gql/monolit/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: graphql-monolit-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 3000
+    targetPort: 3000
+ selector:
+  component: graphql-monolit
