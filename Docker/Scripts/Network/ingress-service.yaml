@@ -11,8 +11,13 @@ metadata:
   nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
   nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
+ tls:
+  - hosts:
+    - localhost
+    secretName: ingress-cert
  rules:
-  - http:
+  - host: "ingress"
+    http:
      paths:
       - path: /
         pathType: Prefix
