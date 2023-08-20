@@ -17,6 +17,7 @@ spec:
     containers:
      - name: postgre
        image: postgres
+       imagePullPolicy: IfNotPresent
        envFrom:
         - configMapRef:
            name: postgre-config
@@ -26,12 +27,13 @@ spec:
         - containerPort: 5432
           name: postgre
        volumeMounts:
-        - mountPath: "/var/lib/postgresql/data"
-          name: postgres-vlm
+        - mountPath: /var/lib/postgresql/data
+          name: mystore
     volumes:
-     - name: postgres-vlm
-       persistentVolumeClaim:
-         claimName: postgres-pvc
+      - name: mystore
+        nfs:
+          server: 192.168.1.154
+          path: "/home/alex/PostgresData"
 ---
 apiVersion: v1
 kind: ConfigMap
