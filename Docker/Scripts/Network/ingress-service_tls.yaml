@@ -9,6 +9,7 @@ metadata:
   nginx.ingress.kubernetes.io/affinity: "cookie"
   nginx.ingress.kubernetes.io/session-cookie-name: "reactivity_socket"
   nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+  nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
  tls:
   - hosts:
@@ -39,3 +40,59 @@ spec:
           name: api-cluster-ip-service
           port:
            number: 5001
+      - path: /ms/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /ms/identity/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-identity-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /ms/identity/api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-identity-api-service
+          port:
+           number: 5020
+      - path: /ms/api/ms-rabbit-producer/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-rabbit-producer-service
+          port:
+           number: 5021
+      - path: /ms/api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-main-api-service
+          port:
+           number: 5022
+      - path: /rb/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: rb-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /rb/api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: rb-api-service
+          port:
+           number: 5030
+      - path: /gql/monolit/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: graphql-monolit-service
+          port:
+           number: 3000
