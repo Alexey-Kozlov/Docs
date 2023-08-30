@@ -20,11 +20,11 @@ spec:
        - containerPort: 80
       env:
        - name: REACT_APP_IDENTITY_API
-         value: "/ms/identity/api"
+         value: "/identity/api"
        - name: REACT_APP_IDENTITY
-         value: "/ms/identity"
-       - name: REACT_APP_FRONT
-         value: "/ms"
+         value: "/identity"
+       - name: REACT_APP_FRONTdo
+         value: "/"
 ---
 apiVersion: v1
 kind: Service

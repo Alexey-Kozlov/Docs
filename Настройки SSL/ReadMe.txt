@@ -14,6 +14,13 @@
 
 - создать файлы ключа и подписи: mkcert -key-file d:\temp\192_168_1_10.key -cert-file d:\temp\192_168_1_10.crt "192.168.1.10"
 в папке D:\Temp будут сохданы 2 файла - 192_168_1_10.key и 192_168_1_10.crt
+
+Для создания сертификата для нескольких dns-имен, выполняем - 
+mkcert -key-file ~/Certificates/certificates.key -cert-file ~/Certificates/certificates.crt reactivities recipebook microservices graphql
+проверяем:
+openssl x509 -noout -ext subjectAltName -in certificates.crt
+
+
 - в файле .env.development создать записи конфигурации реакта:
 
 	PORT=3000

@@ -1,0 +1,110 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: ingress-service
+ annotations:
+  kubernetes.io/ingress.class: nginx
+  nginx.ingress.kubernetes.io/use-regex: "true"
+  nginx.ingress.kubernetes.io/proxy-next-upstream-tries: "1"
+  nginx.ingress.kubernetes.io/affinity: "cookie"
+  nginx.ingress.kubernetes.io/session-cookie-name: "reactivity_socket"
+  nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+  nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+ tls:
+  - hosts:
+    - reactivities
+    - microservices
+    - recipebook
+    - graphql
+    secretName: reactivities-cert
+ rules:
+  - host: "reactivities"
+    http:
+     paths:
+      - path: /
+        pathType: Prefix
+        backend:
+         service:
+          name: front-cluster-ip-service
+          port:
+           number: 80
+      - path: /api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: api-cluster-ip-service
+          port:
+           number: 5001
+      - path: /chat/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: api-cluster-ip-service
+          port:
+           number: 5001
+  - host: "microservices"
+    http:
+     paths:
+      - path: /?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /identity/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-identity-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /identity/api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-identity-api-service
+          port:
+           number: 5020
+      - path: /api/ms-rabbit-producer/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-rabbit-producer-service
+          port:
+           number: 5021
+      - path: /api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: ms-main-api-service
+          port:
+           number: 5022
+  - host: "recipebook"
+    http:
+     paths:
+      - path: /?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: rb-front-cluster-ip-service
+          port:
+           number: 80
+      - path: /api/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: rb-api-service
+          port:
+           number: 5030
+  - host: "graphql"
+    http:
+     paths:
+      - path: /monolit/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: graphql-monolit-service
+          port:
+           number: 3000

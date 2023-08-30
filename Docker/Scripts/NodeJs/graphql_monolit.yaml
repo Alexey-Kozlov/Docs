@@ -30,7 +30,7 @@ spec:
        - name: ITEMS_PER_PAGE
          value: "3"
        - name: URL_PREFIX
-         value: "/gql/monolit/"
+         value: "/monolit/"
 ---
 apiVersion: v1
 kind: Service
