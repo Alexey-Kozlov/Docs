@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: rm-api
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   component: rm-api
+ template:
+  metadata:
+   labels:
+    component: rm-api
+  spec:
+   containers:
+    - name: rm-api
+      image: kozlovas/redmango-api
+      imagePullPolicy: IfNotPresent
+      ports:
+       - containerPort: 5026
+      env:
+       - name: ASPNETCORE_URLS
+         value: "http://+:5026"
+       - name: ConnectionStrings__DefaultConnection
+         value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=RedMango;SearchPath=public"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: rm-api-cluster-ip-service
+spec:
+ type: ClusterIP
+ ports:
+  - port: 5026
+    targetPort: 5026
+ selector:
+  component: rm-api
