@@ -6,14 +6,14 @@ spec:
  replicas: 1
  selector:
   matchLabels:
-   component: front
+   component: rm-front
  template:
   metadata:
    labels:
-    component: front
+    component: rm-front
   spec:
    containers:
-    - name: front
+    - name: rm-front
       image: kozlovas/redmango-front
       imagePullPolicy: IfNotPresent
       ports:
@@ -32,4 +32,4 @@ spec:
   - port: 80
     targetPort: 80
  selector:
-  component: front
+  component: rm-front
