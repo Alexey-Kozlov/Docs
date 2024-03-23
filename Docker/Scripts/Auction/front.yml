@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-front
+spec:
+  selector:
+    matchLabels:
+      app: auction-front
+  template:
+    metadata:
+      labels:
+        app: auction-front
+    spec:
+      containers:
+      - name: auction-front
+        image: kozlovas/auction-front
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: REACT_APP_API_URL
+            value: http://auction-gateway-clusterip/
+          - name: REACT_APP_PROD_NOTIFY_URL
+            value: https://auction/notifications
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-front-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-front
+  ports:
+  - port: 80
+    targetPort: 80
+

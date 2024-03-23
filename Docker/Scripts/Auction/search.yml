@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-search
+spec:
+  selector:
+    matchLabels:
+      app: auction-search
+  template:
+    metadata:
+      labels:
+        app: auction-search
+    spec:
+      containers:
+      - name: auction-search
+        image: kozlovas/auction-search-api
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: ASPNETCORE_URLS
+            value: "http://+:80"
+          - name: RabbitMq__Host
+            value: rabbitmq-cluster-ip-service
+          - name: RabbitMq__Username
+            value: guest
+          - name: RabbitMq__Password
+            value: guest
+          - name: ConnectionStrings__DefaultConnection
+            value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=AuctionsSearch;SearchPath=public"
+          - name: AuctionServiceUrl
+            value: http://auction-auction-clusterip
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-search-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-search
+  ports:
+  - port: 80
+    targetPort: 80
+

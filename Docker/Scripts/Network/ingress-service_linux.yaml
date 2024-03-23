@@ -17,6 +17,8 @@ spec:
     - microservices
     - recipebook
     - graphql
+    - auction
+    - redmango
     secretName: reactivities-cert
  rules:
   - host: "reactivities"
@@ -125,3 +127,55 @@ spec:
           name: graphql-monolit-service
           port:
            number: 3000
+  - host: "auction"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: auction-front-clusterip
+            port:
+              number: 80
+      - path: /notifications/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: auction-gateway-clusterip
+          port:
+           number: 80
+      - path: /search/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: auction-gateway-clusterip
+          port:
+           number: 80
+      - path: /auctions/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: auction-gateway-clusterip
+          port:
+           number: 80
+      - path: /bids/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: auction-gateway-clusterip
+          port:
+           number: 80
+      - path: /images/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: auction-gateway-clusterip
+          port:
+           number: 80
+      - path: /identity/?(.*)
+        pathType: Prefix
+        backend:
+         service:
+          name: auction-gateway-clusterip
+          port:
+           number: 80

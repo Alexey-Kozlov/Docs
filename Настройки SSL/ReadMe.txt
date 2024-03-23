@@ -16,7 +16,7 @@
 в папке D:\Temp будут сохданы 2 файла - 192_168_1_10.key и 192_168_1_10.crt
 
 Для создания сертификата для нескольких dns-имен, выполняем - 
-mkcert -key-file ~/Certificates/certificates.key -cert-file ~/Certificates/certificates.crt reactivities recipebook microservices graphql
+mkcert -key-file ~/Certificates/certificates.key -cert-file ~/Certificates/certificates.crt reactivities recipebook microservices graphql redmango auction auction-api
 проверяем:
 openssl x509 -noout -ext subjectAltName -in certificates.crt
 
