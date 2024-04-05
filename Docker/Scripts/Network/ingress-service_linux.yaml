@@ -137,42 +137,7 @@ spec:
             name: auction-front-clusterip
             port:
               number: 80
-      - path: /api/notifications/?(.*)
-        pathType: Prefix
-        backend:
-         service:
-          name: auction-gateway-clusterip
-          port:
-           number: 80
-      - path: /api/search/?(.*)
-        pathType: Prefix
-        backend:
-         service:
-          name: auction-gateway-clusterip
-          port:
-           number: 80
-      - path: /api/auctions/?(.*)
-        pathType: Prefix
-        backend:
-         service:
-          name: auction-gateway-clusterip
-          port:
-           number: 80
-      - path: /api/bids/?(.*)
-        pathType: Prefix
-        backend:
-         service:
-          name: auction-gateway-clusterip
-          port:
-           number: 80
-      - path: /api/images/?(.*)
-        pathType: Prefix
-        backend:
-         service:
-          name: auction-gateway-clusterip
-          port:
-           number: 80
-      - path: /api/identity/?(.*)
+      - path: /api/?(.*)
         pathType: Prefix
         backend:
          service:

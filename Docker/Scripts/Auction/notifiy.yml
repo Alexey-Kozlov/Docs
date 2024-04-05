@@ -24,6 +24,8 @@ spec:
             value: guest
           - name: RabbitMq__Password
             value: guest
+          - name: ConnectionStrings__DefaultConnection
+            value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=AuctionsNotifications;SearchPath=public"
         ports:
         - containerPort: 80
 ---
