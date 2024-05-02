@@ -20,8 +20,18 @@ spec:
             value: https://auction
           - name: ASPNETCORE_URLS
             value: "http://+:80"
-        ports:
-        - containerPort: 80
+          - name: RabbitMq__Host
+            value: rabbitmq-cluster-ip-service
+          - name: RabbitMq__Username
+            value: guest
+          - name: RabbitMq__Password
+            value: guest
+          - name: GrpcImage
+            value: http://auction-image-clusterip:7778
+          - name: Redis__Config
+            value: redis-management-ip-service
+          - name: Redis__Instance
+            value: local
 ---
 apiVersion: v1
 kind: Service

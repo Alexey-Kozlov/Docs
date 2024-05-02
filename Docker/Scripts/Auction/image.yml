@@ -16,8 +16,10 @@ spec:
         image: kozlovas/auction-image-api
         imagePullPolicy: IfNotPresent
         env:
-          - name: ASPNETCORE_URLS
-            value: "http://+:80"
+          - name: Kestrel__Endpoints__Grpc__Protocols
+            value: Http2
+          - name: Kestrel__Endpoints__Grpc__Url
+            value: http://+:7778
           - name: RabbitMq__Host
             value: rabbitmq-cluster-ip-service
           - name: RabbitMq__Username
@@ -36,6 +38,7 @@ spec:
   selector:
     app: auction-image
   ports:
-  - port: 80
-    targetPort: 80
+  - port: 7778
+    targetPort: 7778
+    name: grpc
 
