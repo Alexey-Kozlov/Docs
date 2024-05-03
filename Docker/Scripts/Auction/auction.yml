@@ -25,10 +25,6 @@ spec:
             value: guest
           - name: ConnectionStrings__DefaultConnection
             value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=AuctionsAuctions;SearchPath=public"
-          - name: Kestrel__Endpoints__Grpc__Protocols
-            value: Http2
-          - name: Kestrel__Endpoints__Grpc__Url
-            value: http://+:7777
           - name: Kestrel__Endpoints__WebApi__Protocols
             value: Http1
           - name: Kestrel__Endpoints__WebApi__Url
@@ -46,6 +42,3 @@ spec:
   - port: 80
     targetPort: 80
     name: web
-  - port: 7777
-    targetPort: 7777
-    name: grpc
