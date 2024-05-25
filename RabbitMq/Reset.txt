@@ -1,0 +1,6 @@
+Останавливаем все приложения, использующие данный rabbitmq
+Открываем в локере для нужного пода с Rabbitmq страничку Exec
+bash
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl start_app
