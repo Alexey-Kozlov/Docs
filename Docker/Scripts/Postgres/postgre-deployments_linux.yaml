@@ -32,8 +32,8 @@ spec:
     volumes:
       - name: mystore
         nfs:
-          server: 192.168.1.11
-          path: "/home/alex/Data/PostgresData"
+          server: 192.168.1.12
+          path: "/var/Data/PostgresData"
 ---
 apiVersion: v1
 kind: ConfigMap
