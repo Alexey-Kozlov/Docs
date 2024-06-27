@@ -17,7 +17,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: REACT_APP_API_URL
-            value: http://auction-gateway-clusterip/
+            value: https://auction
           - name: REACT_APP_PROD_NOTIFY_URL
             value: https://auction/notifications
         ports:
