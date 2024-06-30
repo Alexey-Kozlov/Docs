@@ -19,7 +19,11 @@ spec:
           - name: REACT_APP_API_URL
             value: https://auction
           - name: REACT_APP_PROD_NOTIFY_URL
-            value: https://auction/notifications
+            value: https://auction/api/notifications
+          - name: REACT_APP_API_AUTH
+            value: https://auction/api/identity/
+          - name: REACT_APP_NOTIFY_API
+            value: https://auction/api
         ports:
         - containerPort: 80
 ---
