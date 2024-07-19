@@ -18,3 +18,4 @@ cd ~/Certificates
 kubectl create secret tls my-cert --namespace=default --key=certificates.key --cert=certificates.crt -o yaml
 
 Далее ставим уже свои настройки:
+kubectl apply -f ingress-service.yaml

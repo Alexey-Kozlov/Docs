@@ -28,7 +28,7 @@ spec:
      - name: mongodb-vlm
        nfs:
          server: 192.168.1.12
-         path: "/var/data/MongoDbData"
+         path: "/var/data/MongoDb"
 ---
 apiVersion: v1
 kind: Service
