@@ -103,7 +103,7 @@ spec:
   - host: recipebook
     http:
      paths:
-      - path: /?(.*)
+      - path: /
         pathType: ImplementationSpecific
         backend:
          service:

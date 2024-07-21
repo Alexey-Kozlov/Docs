@@ -18,6 +18,9 @@ spec:
      imagePullPolicy: IfNotPresent
      ports:
      - containerPort: 80
+     env:
+       - name: NG_APP_API
+         value: /api
 ---
 apiVersion: v1
 kind: Service
