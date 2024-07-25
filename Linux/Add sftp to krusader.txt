@@ -1,0 +1,2 @@
+Для соединения по sftp в Krusader нужно:
+yay -S kio5-extras
