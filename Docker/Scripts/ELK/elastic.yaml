@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: elastic
+ labels:
+  app: elastic
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: elastic
+ template:
+   metadata:
+    labels:
+     app: elastic
+   spec:
+    containers:
+    - name: elastic
+      image: elasticsearch:8.14.3
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 9200
+        name: elastic
+      volumeMounts:
+      - mountPath: /usr/share/elasticsearch/data
+        name: mydata
+      - mountPath: /usr/share/elasticsearch/config
+        name: myconf
+      resources:
+         limits:
+           memory: 2Gi
+      env:
+        - name: discovery.type
+          value: single-node
+        - name: ELASTIC_PASSWORD
+          value: elastic
+    volumes:
+    - name: mydata
+      nfs:
+        server: 192.168.1.12
+        path: "/var/data/ELK"
+    - name: myconf
+      nfs:
+        server: 192.168.1.12
+        path: "/var/data/ELK_Conf"
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: elastic-service
+ labels:
+   app: elastic-service
+spec:
+ type: ClusterIP
+ selector:
+  app: elastic
+ ports:
+  - name: elastic
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
