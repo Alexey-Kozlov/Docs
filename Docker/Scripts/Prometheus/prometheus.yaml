@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:main
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+          - mountPath: /etc/prometheus
+            name: prom-conf
+          - mountPath: /prometheus
+            name: prom-data
+      volumes:
+        - name: prom-conf
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/Prometheus_Conf"
+        - name: prom-data
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/Prometheus_Data"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-ip-service
+spec:
+  selector:
+    app: prometheus
+  ports:
+  - protocol: TCP
+    port: 9090
+    nodePort: 30438
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: prometheus-cluster-ip-service
+spec:
+ type: ClusterIP
+ selector:
+  app: prometheus
+ ports:
+  - name: prometheus
+    protocol: TCP
+    port: 9090
+    targetPort: 9090

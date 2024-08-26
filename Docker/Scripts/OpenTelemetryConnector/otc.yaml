@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: otc
+spec:
+  selector:
+    matchLabels:
+      app: otc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: otc
+    spec:
+      containers:
+      - name: otc
+        image: otel/opentelemetry-collector-contrib:0.107.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8888
+        - containerPort: 8889
+        - containerPort: 4317
+        - containerPort: 55679
+        - containerPort: 13133
+        volumeMounts:
+          - mountPath: /etc/otelcol-contrib
+            name: otc-conf
+      volumes:
+        - name: otc-conf
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/OTC_Conf"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otc-ip-service-otc
+spec:
+ type: ClusterIP
+ selector:
+  app: otc
+ ports:
+  - name: otc
+    protocol: TCP
+    port: 8888
+    targetPort: 8888
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otc-ip-service-dotnet
+spec:
+ type: ClusterIP
+ selector:
+  app: otc
+ ports:
+  - name: otc
+    protocol: TCP
+    port: 8889
+    targetPort: 8889
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otc-ip-service-import
+spec:
+ type: ClusterIP
+ selector:
+  app: otc
+ ports:
+  - name: otc
+    protocol: TCP
+    port: 4317
+    targetPort: 4317
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: otc-service-dotnet-local
+ labels:
+   app: otc-service-dotnet-local
+spec:
+ selector:
+   app: otc
+ ports:
+ - protocol: TCP
+   port: 8889
+   nodePort: 30437
+ type: NodePort
