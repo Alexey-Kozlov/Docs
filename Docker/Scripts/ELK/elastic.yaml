@@ -34,13 +34,11 @@ spec:
           value: single-node
         - name: ELASTIC_PASSWORD
           value: elastic
-        - name: KIBANA_PASSWORD
-          value: kibana
     volumes:
     - name: mydata
       nfs:
         server: 192.168.1.12
-        path: "/var/data/ELK"
+        path: "/var/data/ELK_Data"
     - name: myconf
       nfs:
         server: 192.168.1.12
@@ -54,6 +52,7 @@ metadata:
    app: elastic-service
 spec:
  type: ClusterIP
+ clusterIP: 10.96.10.1
  selector:
    app: elastic
  ports:

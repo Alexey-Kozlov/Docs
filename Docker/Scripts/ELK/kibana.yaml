@@ -27,11 +27,17 @@ spec:
       volumeMounts:
       - mountPath: /usr/share/kibana/config
         name: conf
+      - mountPath: /usr/share/kibana/data
+        name: data
     volumes:
     - name: conf
       nfs:
         server: 192.168.1.12
-        path: "/var/data/ELK_Kibana_Conf"
+        path: "/var/data/Kibana_Conf"
+    - name: data
+      nfs:
+        server: 192.168.1.12
+        path: "/var/data/Kibana_Data"
 ---
 apiVersion: v1
 kind: Service

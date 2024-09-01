@@ -22,12 +22,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-management-ip-service
+ name: redis-cluster-ip-service
 spec:
-  selector:
-    app: redis
-  ports:
-  - protocol: TCP
+ type: ClusterIP
+ selector:
+  app: redis
+ ports:
+  - name: redis
+    protocol: TCP
     port: 6379
-    nodePort: 30202
-  type: NodePort
+    targetPort: 6379
