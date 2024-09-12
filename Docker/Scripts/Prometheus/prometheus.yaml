@@ -15,6 +15,9 @@ spec:
       containers:
       - name: prometheus
         image: prom/prometheus:main
+        args:
+          - '--storage.tsdb.retention.time=14d'
+          - '--config.file=/etc/prometheus/prometheus.yml'
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9090
