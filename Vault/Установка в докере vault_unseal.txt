@@ -1,0 +1,24 @@
+Для автоматической разблокировки Vault
+
+Скачиваем образ
+
+docker pull ghcr.io/lrstanley/vault-unseal:latest
+
+Монтируем NFS и создаем Volume
+
+docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw --opt device=:/var/data/Vault_Unseal_Local Vault_Unseal_Local
+
+Копируем файл vault-unseal.yaml конфигурации  в Vault_Unseal_Local
+
+Правим этот файл - записываем правильный токен для разблокировки в раздел unseal_tokens, токен берем из конфигурационного json из раздела "keys", должны быть 3 одинаковые записи токена
+
+Делаем правильный доступ к смонтированному тому
+
+sudo chmod 0600 -R /var/data/Vault_Unseal_Local/
+
+Запускаем контейнер
+
+docker run --name vault-unseal --mount source=Vault_Unseal_Local,target=/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal.yaml -d ghcr.io/lrstanley/vault-unseal:latest
+
+Ждем 10 секунд, проверяем разблокировку по адресу - http://localhost:8200/
+Должна смениться надпись на разблокировку на ввод токена, статус должен стать "Unsealed"
