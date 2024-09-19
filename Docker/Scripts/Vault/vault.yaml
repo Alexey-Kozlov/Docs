@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vault
+spec:
+  selector:
+    matchLabels:
+      app: vault
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+        - name: vault
+          image: vault:1.13.3
+          imagePullPolicy: IfNotPresent
+          command: ["vault", "server","-config", "/vault/config/config.hcl" ]
+          env:
+            - name: VAULT_ADDR
+              value: http://localhost:8200
+          ports:
+            - containerPort: 8200
+            - containerPort: 8201
+          volumeMounts:
+            - mountPath: /vault/data
+              name: data
+            - mountPath: /vault/config
+              name: conf
+      volumes:
+        - name: conf
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/Vault_Conf"
+        - name: data
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/Vault_Data"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-ip-service
+spec:
+  selector:
+    app: vault
+  ports:
+  - protocol: TCP
+    port: 8200
+    nodePort: 30440
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: vault-cluster-ip-service
+spec:
+ type: ClusterIP
+ selector:
+  app: vault
+ ports:
+  - name: vault
+    protocol: TCP
+    port: 8200
+    targetPort: 8200

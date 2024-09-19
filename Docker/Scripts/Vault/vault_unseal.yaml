@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vault-unseal
+spec:
+  selector:
+    matchLabels:
+      app: vault-unseal
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vault-unseal
+    spec:
+      containers:
+        - name: vault-unseal
+          image: ghcr.io/lrstanley/vault-unseal:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ALLOW_SINGLE_NODE
+              value: "true"
+            - name: CONFIG_PATH
+              value: "/etc/vault-unseal-conf.yaml"
+          volumeMounts:
+            - mountPath: /etc
+              name: conf
+      volumes:
+        - name: conf
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/Vault_Unseal"

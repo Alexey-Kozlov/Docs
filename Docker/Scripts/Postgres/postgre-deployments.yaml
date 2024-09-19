@@ -68,3 +68,19 @@ spec:
  ports:
   - port: 5432
     nodePort: 30432
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: postgre-service-cluster-ip
+ labels:
+   app: postgre-service-cluster-ip
+spec:
+ type: ClusterIP
+ selector:
+   app: postgre
+ ports:
+ - name: postgre
+   protocol: TCP
+   port: 5432
+   targetPort: 5432
