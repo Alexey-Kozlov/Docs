@@ -1,12 +1,15 @@
---запускаем БД
-docker run --name mongodb -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin -p 27017:27017 -d mongo
+Для постоянного хранения
+Создаем NFS:
+docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw --opt device=:/var/data/MongoDb_Local MongoDb_Local
+docker run --name mongodb -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=admin --mount source=MongoDb_Local,target=/data/db -p 27017:27017 -d mongo
+
 --без аутентификации
 docker run --name mongodb -p 27017:27017 -d mongo
 
---админка - mongoclient, лучше чем mongo-express
-docker run -p 8081:3000 --name mongoclient -d mongoclient/mongoclient
-подключаемся - http://localhost:8081
-при подключении - заменяем URL на нужный - mongodb://admin:admin@192.168.1.10:27017/admin
+--админка - mongoclient, страрнная и кривая..
 
 --запускаем админку mongo-express - так себе, простенькая
 docker run --name mongoadmin -e ME_CONFIG_MONGODB_URL=mongodb://admin:admin@192.168.1.10:27017 -p 8081:8081 -d mongo-express
+
+
+
