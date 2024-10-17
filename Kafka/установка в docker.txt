@@ -9,7 +9,7 @@ docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw 
 
 монтируем kafka
 
-docker run -d --name kafka -p 9092:9092 -p 9093:9093 -e KAFKA_ENABLE_KRAFT=yes -e KAFKA_CFG_PROCESS_ROLES=broker,controller -e KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://host.docker.internal:9092 -e KAFKA_CFG_BROKER_ID=1 -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@localhost:9093 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_KRAFT_CLUSTER_ID=kafka_local -e KAFKA_CFG_NODE_ID=1 --mount source=Kafka_Local,target=/bitnami/kafka bitnami/kafka:latest
+docker run -d --name kafka -p 9092:9092 -p 9093:9093 -e KAFKA_ENABLE_KRAFT=yes -e KAFKA_CFG_PROCESS_ROLES=broker,controller -e KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://host.docker.internal:9092 -e KAFKA_CFG_BROKER_ID=1 -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@localhost:9093 -e ALLOW_PLAINTEXT_LISTENER=yes -e KAFKA_KRAFT_CLUSTER_ID=kafka_local -e KAFKA_CFG_NODE_ID=1 -e KAFKA_CFG_MESSAGE_MAX_BYTES=30728640 -e KAFKA_CFG_REPLICA_FETCH_MAX_BYTES=30728640 --mount source=Kafka_Local,target=/bitnami/kafka bitnami/kafka:latest
 
 монтируем kafka-ui
 
@@ -19,3 +19,10 @@ docker run --name kafka-ui -d -p 9001:8080 -e DYNAMIC_CONFIG_ENABLED=true -e KAF
 иначе будет ошибка в приложении по резолвингу хоста
 
 kafka-ui запускаем: http://localhost:9001
+
+
+Увеличить (при необходимости) максимальное количество символов в сообщении,
+для это в настройках (Settings) топика устанавливаем параметр max.message.bytes в нужное значение.
+В настройках Kafka это уже указано, также нужно в настройках клиента (Producer) установить нужные настройки, например такие:
+MessageMaxBytes = 30485880,
+QueueBufferingMaxKbytes = 40000
