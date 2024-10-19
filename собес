@@ -1,7 +1,7 @@
 Теория
 сравнение переменных - по значению и адресу, коллекции, Generics (constraints), делегаты, расширения, кортежи (tuple), records
 boxing- unboxing, worker:BackgroundService (реализует IHostedService)
-наследование - перегрузка, переопределение (запрет - sealed), замещение или скрытие
+наследование - перегрузка, переопределение (запрет - sealed), замещение или скрытие, абстрактные классы и методы
 
 Многопоточность и асинхронность (Task и void в асинхронном вызове)
 DI, Паттерны и SOLID
@@ -20,6 +20,9 @@ Kubernetes
 TypeScript - стрелочная  ф-я и this, чистая функция, прототипы, null и undefined,  interface vs type,
 promise, промисификация (обертка асинхронной функции вокруг промиса, вызывается как синхронная), замыкания, EventLoop,
 (bind,call,apply - bind - обертка, отложенный вызов, call - замена this,перечисление аргументов; apply - тоже,передается список переменных)
+
+React
+props, drill up и drill down, useState (прямое обновление и updater function), useEffect (однократное выполнение хука), useParams, useNavigate (прямая ссылка window.location.href), Redux
 
 Angular
 state, паттерн Redux, NgRx, action -> reducer(чистая функция)
@@ -58,5 +61,4 @@ mixins - вынос общей логики в отдельный объект, 
 provide-inject - для передачи данных от родителя непосредственно в дочерний компоненте минуя промежуточные
 composition api (script setup) - разделение кода не по структуре (data, computed, ...) а по функционалу
 
-React
-props, drill up и drill down, useState (прямое обновление и updater function), useEffect (однократное выполнение хука), useParams, useNavigate (прямая ссылка window.location.href)
+

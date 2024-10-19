@@ -13,19 +13,13 @@ spec:
     spec:
       containers:
       - name: auction-finance
-        image: kozlovas/auction-finance-api
+        image: kozlovas/auction-finance
         imagePullPolicy: IfNotPresent
         env:
           - name: ASPNETCORE_URLS
             value: "http://+:80"
           - name: RabbitMq__Host
             value: rabbitmq-cluster-ip-service
-          - name: RabbitMq__Username
-            value: guest
-          - name: RabbitMq__Password
-            value: guest
-          - name: ConnectionStrings__DefaultConnection
-            value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=AuctionsFinance;SearchPath=public"
 ---
 apiVersion: v1
 kind: Service

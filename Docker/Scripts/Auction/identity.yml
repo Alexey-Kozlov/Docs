@@ -14,11 +14,9 @@ spec:
     spec:
       containers:
       - name: auction-identity
-        image: kozlovas/auction-identity-api
+        image: kozlovas/auction-identity
         imagePullPolicy: IfNotPresent
         env:
-          - name: ConnectionStrings__DefaultConnection
-            value: "User ID=postgres;Password=admin;Host=postgre-service;Port=5432;Database=AuctionsIdentity;SearchPath=public"
           - name: Kestrel__Endpoints__WebApi__Protocols
             value: Http1
           - name: Kestrel__Endpoints__WebApi__Url

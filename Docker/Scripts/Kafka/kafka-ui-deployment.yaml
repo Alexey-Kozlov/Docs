@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafkaui
+spec:
+  selector:
+    matchLabels:
+      app: kafkaui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafkaui
+    spec:
+      containers:
+        - name: kafkaui
+          image: provectuslabs/kafka-ui
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /etc/kafkaui
+              name: data
+          env:
+            - name: DYNAMIC_CONFIG_ENABLED
+              value: "true"
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS
+              value: kafka-cluster-ip-service-9092:9092
+            - name: KAFKA_CLUSTERS_0_NAME
+              value: kafka_local
+      volumes:
+        - name: data
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/KafkaUI"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafkaui-ip-service
+spec:
+  selector:
+    app: kafkaui
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30441
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: kafkaui-cluster-ip-service
+spec:
+ type: ClusterIP
+ selector:
+  app: kafkaui
+ ports:
+  - name: kafkaui
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
