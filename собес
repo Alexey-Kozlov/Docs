@@ -9,12 +9,12 @@ DI, Паттерны и SOLID
 Конвейер, порядок объявления сервисов
 Спецификации webapi - rest, graphql, grpc, soap
 ORM, IQurable IEnumerable, (WithTracking, AsNoTracking)
-БД - реляционные, документарные, индексы, оптимизация, триггеры, транзакции, join->left join
+БД - реляционные, документарные, индексы, оптимизация, триггеры, транзакции (SavePoint),vacuum, join->left join, Constraints, нормализация
 Виды соединений (nested loop, merge, hash), селективность, план выполнения, parameter sniffing, CTE, оконные функции -> OVER (Partition by .. Order by) row_number(), View & Materialized View
 
 Сервисные брокеры - Rabbit, MassTransit (идемпотентность),  Kafka, Redis
 Kubernetes
-Архитектуры - Монолит, сервис-ориентированная архитектура, Микросервисы, Чистая архитектура, Event Sourcing
+Архитектуры - Монолит, сервис-ориентированная архитектура, Микросервисы, Чистая архитектура, CQRS, Event Sourcing
 
 Фронт
 TypeScript - стрелочная  ф-я и this, чистая функция, прототипы, null и undefined,  interface vs type,
@@ -25,18 +25,19 @@ React
 props, drill up и drill down, useState (прямое обновление и updater function), useEffect (однократное выполнение хука), useParams, useNavigate (прямая ссылка window.location.href), Redux
 
 Angular
-state, паттерн Redux, NgRx, action -> reducer(чистая функция)
+state, NgRx - это Redux для Ангуляр, action -> reducer(чистая функция)
 binding - интерполяция {{}}, property (к значениям), к событиям, dom -> angular(или атрибуту), 2 way (ngmodel)
+@NgModule - центральный элемент для описания других модулей (imports и exports), провайдеры сервисов, загрузочный модкль - bootstrap
 автономные компоненты -> @Component standalone:true, плюсы и минусы
 цикл, директива track - указывает на уникальный ключ
 декоратор @input - получать значения из родительского компонента
-декоратор @output - передача события внешнему компоненту, свойство EventEmitter, emit - метод передачи
+декоратор @output - передача события внешнему компоненту через объект EventEmitter, emit - метод передачи
 структурные директивы ngIf, ngFor - звездочка - добавляет ng-template
 
 сервисы - предоставление данных, вынос логики, взаимодействие между комплонентами
 определение сервиса - директива @injectable, гарантирует что объект может быть создан и передан как зависимость
-применение сервиса -  imnport, добавить в коллекцию Providers, вызвать через DI в конструкторе
-различия в применении сервиса Srv и рросто New Srv - сервис тот же самый, new - новый инстанс
+применение сервиса -  import, добавить в коллекцию Providers, вызвать через DI в конструкторе
+различия в применении сервиса Srv и просто New Srv - сервис тот же самый, new - новый инстанс
 injection hierarchy
 
 RxJs - stream-like flows, эмиттер (observable, data sources), subscriber(observer или listener).
