@@ -25,7 +25,7 @@ spec:
           - name: GrpcImage
             value: http://auction-image-clusterip:7778
           - name: Redis__Config
-            value: redis-cluster-ip-service:6379
+            value: redis-cluster-ip-service:6379, allowAdmin=true
 ---
 apiVersion: v1
 kind: Service
