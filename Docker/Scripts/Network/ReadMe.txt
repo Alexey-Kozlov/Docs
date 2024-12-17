@@ -14,7 +14,7 @@ kubectl describe svc -n ingress-nginx ingress-nginx-controller
 
 
 Делаем секрет в кубере для https:
-cd ~/Certificates
+cd /var/certificates
 kubectl create secret tls my-cert --namespace=default --key=certificates.key --cert=certificates.crt -o yaml
 
 Далее ставим уже свои настройки:

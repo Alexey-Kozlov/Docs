@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: otc
-        image: otel/opentelemetry-collector-contrib:0.107.0
+        image: otel/opentelemetry-collector-contrib:0.115.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8888

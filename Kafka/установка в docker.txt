@@ -1,7 +1,7 @@
 скачиваем kafka:
 
-docker pull bitnami/kafka
-docker pull provectuslabs/kafka-ui
+docker pull bitnami/kafka:latest
+docker pull provectuslabs/kafka-ui:v0.7.2
 
 монтируем NFS:
 
@@ -13,7 +13,7 @@ docker run -d --name kafka -p 9092:9092 -p 9093:9093 -e KAFKA_ENABLE_KRAFT=yes -
 
 монтируем kafka-ui
 
-docker run --name kafka-ui -d -p 9001:8080 -e DYNAMIC_CONFIG_ENABLED=true -e KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=host.docker.internal:9092 -e KAFKA_CLUSTERS_0_NAME=kafka_local provectuslabs/kafka-ui
+docker run --name kafka-ui -d -p 9001:8080 -e DYNAMIC_CONFIG_ENABLED=true -e KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=host.docker.internal:9092 -e KAFKA_CLUSTERS_0_NAME=kafka_local provectuslabs/kafka-ui:v0.7.2
 
 Важно проверить - в /etc/hosts должна быть запись - 127.0.0.1   host.docker.internal,
 иначе будет ошибка в приложении по резолвингу хоста
