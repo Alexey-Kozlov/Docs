@@ -5,7 +5,7 @@ docker pull provectuslabs/kafka-ui:v0.7.2
 
 монтируем NFS:
 
-docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw --opt device=:/var/data/Kafka_Local Kafka_Local
+docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,vers=4,rw --opt device=:/var/data/Kafka_Local Kafka_Local
 
 монтируем kafka
 

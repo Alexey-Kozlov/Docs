@@ -1,0 +1,122 @@
+видео - avidemux
+gitnuro
+transmission
+haruna
+krusader
+private internet access
+
+Установка
+
+утилита iwctl - настройка wifi
+device list
+station wlan0 scan
+station wlan0 get-networks
+station wlan0 connect DIR-X1530-ADD5
+exit
+
+делаем разделы
+просмотр разделов - lsblk
+cfdisk /dev/nvme1n1
+cfdisk /dev/nvme0n1
+правим разделы этой утилитой, список разделов:
+/dev/nvme1n1p1  - EFI
+/dev/nvme1n1p2  - SWAP
+/dev/nvme1n1p3  - основной раздел
+/dev/nvme0n1p1  - дополнительный раздел на втором физическом диске
+
+форматируем:
+mkfs.ext4 /dev/nvme1n1p3  -это основной раздел
+mkfs.ext4 /dev/nvme0n1p1  -это дополнительный раздел
+mkfs.fat -F32 /dev/nvme1n1p1  - efi
+mkswap /dev/nvme1n1p2  - swap форматируем
+swapon /dev/nvme1n1p2  - swap включаем
+
+монтируем:
+mount /dev/nvme1n1p3 /mnt  - монтируем корневой раздел
+создаем нужные точки монтирования:
+mkdir /mnt/efi
+mkdir /mnt/home
+mkdir /mnt/files
+монтируем нужные разделы на созданные точки:
+mount /dev/nvme1n1p1 /mnt/efi
+mount /dev/nvme1n1p3 /mnt/home
+mount /dev/nvme0n1p1 /mnt/files
+
+устанавливаем основные компоненты:
+pacstrap /mnt base linux linux-firmware
+
+делаем fstab:
+genfstab -U /mnt >> /mnt/etc/fstab
+
+подключаемся под рутом:
+arch-chroot /mnt /bin/bash
+
+устанавливаем редактор vim:
+pacman -S vim
+
+настраиваем синхронизациювремени:
+exit - выходим  из рута
+timedatectl set-ntp true
+timedatectl set-timezone Europe/Moscow 
+timedatectl status
+ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+hwclock --systohc
+
+локализация
+arch-chroot /mnt /bin/bash
+vim /etc/locale.gen
+раскомментируем строки - en_US.UTF-8 UTF-8   ru_RU.UTF-8 UTF-8
+сохраняем: <Esc> :w <Enter> :q
+locale-gen
+ставим ИЛИ английскую локаль - echo "LANG=en_US.UTF-8" > /etc/locale.conf
+ставим ИЛИ русскую локаль - echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
+добавляем русский шрифт в локаль:
+echo "FONT=cyr-sun16" > /etc/vconsole.conf
+
+наименование компа
+vim /etc/hostname  - указываем в первой строке наименование компа- arc
+:w <Enter> :q
+
+правим hosts:
+
+vim /etc/hosts
+
+127.0.0.1  localhost
+::1        localhost
+127.0.0.1  arc.localdomain arc
+
+:w  <Enter> :q
+
+ставим пароль на root:
+passwd
+
+Делаем  нового пользователя:
+useradd -m alex
+passwd alex
+usermod -aG wheel,audio,video,storage alex
+
+ставим sudo:
+pacman -S sudo
+
+редактор по умолчанию:
+EDITOR=vim
+
+делаем расширенные права у обычного пользователя:
+visudo
+раскомментировать - %wheel ALL=(ALL) ALL
+
+Ставим  загрузчик:
+pacman -S grub efibootmgr
+grub-install /dev/nvme1n1 --efi-dir=/efi
+пересобираем загрузчик
+mkinitcpio -p linux
+обновляем конфиг
+grub-mkconfig -o /boot/grub/grub.cfg
+
+ставим графику:
+pacman -S xorg plasma
+
+активизируем сервис Display Manager:
+systemctl enable sddm.service
+systemctl enable NetworkManager.service
+перегружаем, все

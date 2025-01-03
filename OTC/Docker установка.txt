@@ -2,6 +2,6 @@ Open Telemetry Collector, запуск в docker
 
 docker pull otel/opentelemetry-collector-contrib:0.115.1
 
-делаем в NFC папку для хранения конфига - OTC_Local_Conf
+docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,vers=4,rw --opt device=:/var/data/OTC_Local_Conf OTC_Local_Conf
 
 docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d --mount source=OTC_Local_Conf,target=/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.115.1
