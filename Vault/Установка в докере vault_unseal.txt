@@ -16,9 +16,13 @@ docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,ver
 
 sudo chmod 0600 -R /var/data/Vault_Unseal_Local/
 
-Запускаем контейнер
+Запускаем контейнер (NFC)
 
 docker run --name vault-unseal --mount source=Vault_Unseal_Local,target=/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal.yaml -d ghcr.io/lrstanley/vault-unseal:latest
+
+Запускаем контейнер (маппинг)
+
+docker run --name vault-unseal --mount type=bind,source=/var/data/Vault_Unseal_Local,target=/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal.yaml -d ghcr.io/lrstanley/vault-unseal:latest
 
 Ждем 10 секунд, проверяем разблокировку по адресу - http://localhost:8200/
 Должна смениться надпись на разблокировку на ввод токена, статус должен стать "Unsealed"

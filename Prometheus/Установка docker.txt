@@ -11,5 +11,10 @@ docker pull prom/prometheus:v3.0.1
 docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,vers=4,rw --opt device=:/var/data/Prometheus_Local_Conf Prometheus_Local_Conf
 docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,vers=4,rw --opt device=:/var/data/Prometheus_Local_Data Prometheus_Local_Data
 
+установка (NFS)
 
 docker run -d --name prometheus --mount source=Prometheus_Local_Conf,target=/etc/prometheus --mount source=Prometheus_Local_Data,target=/prometheus -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
+
+установка (маппинг)
+
+docker run -d --name prometheus --mount type=bind,source=/var/data/Prometheus_Local_Conf,target=/etc/prometheus --mount type=bind,source=/var/data/Prometheus_Local_Data,target=/prometheus -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
