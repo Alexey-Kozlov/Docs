@@ -6,7 +6,7 @@ docker pull ghcr.io/lrstanley/vault-unseal:latest
 
 Монтируем NFS и создаем Volume
 
-docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,vers=4,rw --opt device=:/var/data/Vault_Unseal_Local Vault_Unseal_Local
+docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw --opt device=:/home/alex/data/Vault_Unseal_Local Vault_Unseal_Local
 
 Копируем файл vault-unseal.yaml конфигурации  в Vault_Unseal_Local
 
@@ -14,7 +14,7 @@ docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,ver
 
 Делаем правильный доступ к смонтированному тому
 
-sudo chmod 0600 -R /var/data/Vault_Unseal_Local/
+sudo chmod 0600 -R /home/alex/data/Vault_Unseal_Local/
 
 Запускаем контейнер (NFC)
 

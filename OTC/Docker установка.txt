@@ -2,7 +2,7 @@ Open Telemetry Collector, запуск в docker
 
 docker pull otel/opentelemetry-collector-contrib:0.115.1
 
-docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,vers=4,rw --opt device=:/var/data/OTC_Local_Conf OTC_Local_Conf
+docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw --opt device=:/home/alex/data/OTC_Local_Conf OTC_Local_Conf
 
 установка (NFS)
 
