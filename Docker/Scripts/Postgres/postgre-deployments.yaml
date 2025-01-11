@@ -31,9 +31,40 @@ spec:
           name: mystore
     volumes:
       - name: mystore
-        nfs:
-          server: 192.168.1.12
-          path: "/var/data/PostgresData"
+        persistentVolumeClaim:
+          claimName: pvc-postgre
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-postgre
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy:
+  mountOptions:
+    - nfsvers=4.1
+  nfs:
+    path: /home/alex/data/Postgres_Data
+    server: 192.168.1.12
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-postgre
+spec:
+  storageClassName: ""
+  volumeName: pv-postgre
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 10G
 ---
 apiVersion: v1
 kind: ConfigMap

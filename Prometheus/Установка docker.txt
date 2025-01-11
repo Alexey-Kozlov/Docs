@@ -1,19 +1,25 @@
 
 docker pull prom/prometheus:v3.0.1
 
-Делаем NFC
+установка (SSH)
 
-/var/data/Prometheus_Local_Conf
-/var/data/Prometheus_Local_Data
+Должен быть  загружен плагин - docker plugin install vieux/sshfs
 
-Монтируем том в NFC
+Монтируем volume:
 
-docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw --opt device=:/home/alex/data/Prometheus_Local_Conf Prometheus_Local_Conf
-docker volume create --driver local --opt type=nfs --opt o=addr=192.168.1.12,rw --opt device=:/home/alex/data/Prometheus_Local_Data Prometheus_Local_Data
+docker volume create --driver vieux/sshfs -o sshcmd=alex@192.168.1.12:/home/alex/data/Prometheus_Local_Conf -o password=1 -o allow_other="" -o default_permissions="" -o port=22 Prometheus_Local_Conf
+
+docker volume create --driver vieux/sshfs -o sshcmd=alex@192.168.1.12:/home/alex/data/Prometheus_Local_Data -o password=1 -o allow_other="" -o default_permissions="" -o port=22 Prometheus_Local_Data
+
+Запускаем контейнер:
+
+docker run -d --name prometheus -v Prometheus_Local_Conf:/etc/prometheus -v Prometheus_Local_Data:/prometheus -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
+
+
 
 установка (NFS)
 
-docker run -d --name prometheus --mount source=Prometheus_Local_Conf,target=/etc/prometheus --mount source=Prometheus_Local_Data,target=/prometheus -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
+docker run -d --name prometheus --mount 'type=volume,source=Prometheus_Local_Conf,target=/etc/prometheus,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/Prometheus_Local_Conf,"volume-opt=o=addr=192.168.1.12,ro,nfsvers=4,async"' --mount 'type=volume,source=Prometheus_Local_Data,target=/prometheus,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/Prometheus_Local_Data,"volume-opt=o=addr=192.168.1.12,rw,nfsvers=4"' -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
 
 установка (маппинг)
 
