@@ -1,3 +1,65 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-kibana-data
+  labels:
+    name: pv-kibana-data
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Kibana_Data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-kibana-conf
+  labels:
+    name: pv-kibana-conf
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Kibana_Conf
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-kibana-data
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-kibana-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-kibana-conf
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-kibana-conf
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -16,7 +78,7 @@ spec:
    spec:
     containers:
     - name: kibana
-      image: kibana:8.16.1
+      image: kibana:8.17.0
       imagePullPolicy: IfNotPresent
       ports:
       - containerPort: 5601
@@ -31,13 +93,11 @@ spec:
         name: data
     volumes:
     - name: conf
-      nfs:
-        server: 192.168.1.12
-        path: "/var/data/Kibana_Conf"
+      persistentVolumeClaim:
+        claimName: pvc-kibana-conf
     - name: data
-      nfs:
-        server: 192.168.1.12
-        path: "/var/data/Kibana_Data"
+      persistentVolumeClaim:
+        claimName: pvc-kibana-data
 ---
 apiVersion: v1
 kind: Service

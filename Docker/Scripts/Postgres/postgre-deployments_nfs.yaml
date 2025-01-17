@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: postgre
+ labels:
+  app: postgre
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: postgre
+ template:
+   metadata:
+    labels:
+     app: postgre
+   spec:
+    containers:
+     - name: postgre
+       image: postgres:17.2
+       imagePullPolicy: IfNotPresent
+       envFrom:
+        - configMapRef:
+           name: postgre-config
+        - secretRef:
+           name: postgre-secrets
+       ports:
+        - containerPort: 5432
+          name: postgre
+       volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: mystore
+    volumes:
+      - name: mystore
+        nfs:
+          server: 192.168.1.12
+          path: "/var/data/PostgresData"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgre-config
+  labels:
+    app: postgre
+data:
+  POSTGRES_DB: "activities"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgre-secrets
+  labels:
+    app: postgre
+type: Opaque
+data:
+  POSTGRES_USER: cG9zdGdyZXM= #postgres
+  POSTGRES_PASSWORD: YWRtaW4= #admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: postgre-service
+ labels:
+   app: postgre-service
+spec:
+ selector:
+  app: postgre
+ type: NodePort
+ ports:
+  - port: 5432
+    nodePort: 30432
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: postgre-service-cluster-ip
+ labels:
+   app: postgre-service-cluster-ip
+spec:
+ type: ClusterIP
+ selector:
+   app: postgre
+ ports:
+ - name: postgre
+   protocol: TCP
+   port: 5432
+   targetPort: 5432

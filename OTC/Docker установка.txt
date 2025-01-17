@@ -8,16 +8,20 @@ docker pull otel/opentelemetry-collector-contrib:0.115.1
 
 Монтируем volume:
 
-docker volume create --driver vieux/sshfs -o sshcmd=alex@192.168.1.12:/home/alex/data/OTC_Local_Conf -o password=1 -o allow_other="" -o default_permissions="" -o port=22 OTC_Local_Conf
+docker volume create --driver vieux/sshfs -o sshcmd=alex@192.168.1.12:/home/alex/data/OTC_Local_Conf -o password=1 -o allow_other="" -o port=22 OTC_Local_Conf
 
 Запускаем контейнер:
 
 docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d -v OTC_Local_Conf:/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.115.1
 
+----------------------------------------------
+
 установка (NFS)
 
 docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d --mount 'type=volume,source=OTC_Local_Conf,target=/etc/otelcol-contrib,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/OTC_Local_Conf,"volume-opt=o=addr=192.168.1.12,ro,nfsvers=4"' otel/opentelemetry-collector-contrib:0.115.1
 
+-----------------------------------------------
+
 установка (маппинг)
 
-docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d --mount type=bind,source=/var/data/OTC_Local_Conf,target=/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.115.1
+docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d --mount type=bind,source=~/data/OTC_Local_Conf,target=/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.115.1

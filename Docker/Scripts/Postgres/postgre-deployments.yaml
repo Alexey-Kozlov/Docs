@@ -1,70 +1,69 @@
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
- name: postgre
- labels:
-  app: postgre
-spec:
- replicas: 1
- selector:
-  matchLabels:
-   app: postgre
- template:
-   metadata:
-    labels:
-     app: postgre
-   spec:
-    containers:
-     - name: postgre
-       image: postgres:17.2
-       imagePullPolicy: IfNotPresent
-       envFrom:
-        - configMapRef:
-           name: postgre-config
-        - secretRef:
-           name: postgre-secrets
-       ports:
-        - containerPort: 5432
-          name: postgre
-       volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: mystore
-    volumes:
-      - name: mystore
-        persistentVolumeClaim:
-          claimName: pvc-postgre
----
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: pv-postgre
+  labels:
+    name: pv-postgre
 spec:
-  storageClassName: ""
+  storageClassName: hostpath
   capacity:
-    storage: 10Gi
+    storage: 50Gi
   accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy:
-  mountOptions:
-    - nfsvers=4.1
-  nfs:
-    path: /home/alex/data/Postgres_Data
-    server: 192.168.1.12
-    readOnly: false
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Postgres_Data
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-postgre
 spec:
-  storageClassName: ""
-  volumeName: pv-postgre
+  storageClassName: hostpath
   accessModes:
-    - ReadWriteMany
-  volumeMode: Filesystem
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 10G
+      storage: 50Gi
+  selector:
+    matchLabels:
+      name: pv-postgre
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgre
+  labels:
+    app: postgre
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgre
+  template:
+    metadata:
+      labels:
+        app: postgre
+    spec:
+      containers:
+      - name: postgre
+        image: postgres:17.2
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+          name: postgre-config
+        - secretRef:
+          name: postgre-secrets
+        ports:
+        - containerPort: 5432
+          name: postgre
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-storage
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: pvc-postgre
 ---
 apiVersion: v1
 kind: ConfigMap

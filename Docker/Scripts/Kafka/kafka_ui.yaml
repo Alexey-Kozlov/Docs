@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-kafka-ui
+  labels:
+    name: pv-kafka-ui
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/KafkaUI
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-kafka-ui
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-kafka-ui
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafkaui
+spec:
+  selector:
+    matchLabels:
+      app: kafkaui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafkaui
+    spec:
+      containers:
+        - name: kafkaui
+          image: provectuslabs/kafka-ui:v0.7.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /etc/kafkaui
+              name: data
+          env:
+            - name: DYNAMIC_CONFIG_ENABLED
+              value: "true"
+            - name: KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS
+              value: kafka-cluster-ip-service-9092:9092
+            - name: KAFKA_CLUSTERS_0_NAME
+              value: kafka_local
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pvc-kafka-ui
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafkaui-ip-service
+spec:
+  selector:
+    app: kafkaui
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30441
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: kafkaui-cluster-ip-service
+spec:
+ type: ClusterIP
+ selector:
+  app: kafkaui
+ ports:
+  - name: kafkaui
+    protocol: TCP
+    port: 8080
+    targetPort: 8080

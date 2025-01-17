@@ -1,3 +1,65 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-prometheus-data
+  labels:
+    name: pv-prometheus-data
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Prometheus_Data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-prometheus-data
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      name: pv-prometheus-data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-prometheus-conf
+  labels:
+    name: pv-prometheus-conf
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Prometheus_Conf
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-prometheus-conf
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      name: pv-prometheus-conf
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -27,14 +89,12 @@ spec:
           - mountPath: /prometheus
             name: prom-data
       volumes:
-        - name: prom-conf
-          nfs:
-            server: 192.168.1.12
-            path: "/var/data/Prometheus_Conf"
-        - name: prom-data
-          nfs:
-            server: 192.168.1.12
-            path: "/var/data/Prometheus_Data"
+      - name: prom-conf
+        persistentVolumeClaim:
+          claimName: pvc-prometheus-conf
+      - name: prom-data
+        persistentVolumeClaim:
+          claimName: pvc-prometheus-data
 ---
 apiVersion: v1
 kind: Service

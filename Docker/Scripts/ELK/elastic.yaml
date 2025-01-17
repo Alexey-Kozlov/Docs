@@ -1,77 +1,137 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-elk-data
+  labels:
+    name: pv-elk-data
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 20Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/ELK_Data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-elk-conf
+  labels:
+    name: pv-elk-conf
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/ELK_Conf
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-elk-data
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-elk-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-elk-conf
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-elk-conf
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
- name: elastic
- labels:
-  app: elastic
+  name: elastic
+  labels:
+    app: elastic
 spec:
- replicas: 1
- selector:
-  matchLabels:
-   app: elastic
- template:
-   metadata:
-    labels:
-     app: elastic
-   spec:
-    containers:
-    - name: elastic
-      image: elasticsearch:8.16.1
-      imagePullPolicy: IfNotPresent
-      ports:
-      - containerPort: 9200
-        name: elastic
-      volumeMounts:
-      - mountPath: /usr/share/elasticsearch/data
-        name: mydata
-      - mountPath: /usr/share/elasticsearch/config
-        name: myconf
-      resources:
-         limits:
-           memory: 3Gi
-      env:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastic
+  template:
+    metadata:
+      labels:
+        app: elastic
+    spec:
+      containers:
+      - name: elastic
+        image: elasticsearch:8.17.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9200
+          name: elastic
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: elastic-data
+        - mountPath: /usr/share/elasticsearch/config
+          name: elastic-conf
+        resources:
+          limits:
+            memory: 4Gi
+        env:
         - name: discovery.type
           value: single-node
         - name: ELASTIC_PASSWORD
           value: elastic
-    volumes:
-    - name: mydata
-      nfs:
-        server: 192.168.1.12
-        path: "/var/data/ELK_Data"
-    - name: myconf
-      nfs:
-        server: 192.168.1.12
-        path: "/var/data/ELK_Conf"
+      volumes:
+      - name: elastic-conf
+        persistentVolumeClaim:
+          claimName: pvc-elk-conf
+      - name: elastic-data
+        persistentVolumeClaim:
+          claimName: pvc-elk-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
- name: elastic-service
- labels:
-   app: elastic-service
+  name: elastic-service
+  labels:
+    app: elastic-service
 spec:
- type: ClusterIP
- clusterIP: 10.96.10.1
- selector:
-   app: elastic
- ports:
- - name: elastic
-   protocol: TCP
-   port: 9200
-   targetPort: 9200
+  type: ClusterIP
+  clusterIP: 10.96.10.1
+  selector:
+    app: elastic
+  ports:
+  - name: elastic
+    protocol: TCP
+    port: 9200
+    targetPort: 9200
 ---
 apiVersion: v1
 kind: Service
 metadata:
- name: elastic-service-local
- labels:
-   app: elastic-service-local
+  name: elastic-service-local
+  labels:
+    app: elastic-service-local
 spec:
- selector:
-   app: elastic
- ports:
- - protocol: TCP
-   port: 9200
-   nodePort: 30434
- type: NodePort
+  selector:
+    app: elastic
+  ports:
+  - protocol: TCP
+    port: 9200
+    nodePort: 30434
+  type: NodePort

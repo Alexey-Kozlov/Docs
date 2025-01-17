@@ -1,3 +1,65 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vault-data
+  labels:
+    name: pv-vault-data
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Vault_Data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-vault-data
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-vault-data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vault-conf
+  labels:
+    name: pv-vault-conf
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Vault_Conf
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-vault-conf
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-vault-conf
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -29,14 +91,12 @@ spec:
             - mountPath: /vault/config
               name: conf
       volumes:
-        - name: conf
-          nfs:
-            server: 192.168.1.12
-            path: "/var/data/Vault_Conf"
-        - name: data
-          nfs:
-            server: 192.168.1.12
-            path: "/var/data/Vault_Data"
+      - name: data
+        persistentVolumeClaim:
+          claimName: pvc-vault-data
+      - name: conf
+        persistentVolumeClaim:
+          claimName: pvc-vault-conf
 ---
 apiVersion: v1
 kind: Service
