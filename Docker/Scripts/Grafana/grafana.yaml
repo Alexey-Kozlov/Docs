@@ -1,3 +1,65 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-grafana-conf
+  labels:
+    name: pv-grafana-conf
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Grafana_Conf
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-grafana-conf
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-grafana-conf
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-grafana-data
+  labels:
+    name: pv-grafana-data
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/home/alex/data/Grafana_Data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-grafana-data
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-grafana-data
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -29,14 +91,12 @@ spec:
           - name: GF_SECURITY_ADMIN_PASSWORD
             value: admin
       volumes:
-        - name: graf-conf
-          nfs:
-            server: 192.168.1.12
-            path: "/var/data/Grafana_Conf"
-        - name: graf-data
-          nfs:
-            server: 192.168.1.12
-            path: "/var/data/Grafana_Data"
+      - name: graf-conf
+        persistentVolumeClaim:
+          claimName: pvc-grafana-conf
+      - name: graf-data
+        persistentVolumeClaim:
+          claimName: pvc-grafana-data
 ---
 apiVersion: v1
 kind: Service

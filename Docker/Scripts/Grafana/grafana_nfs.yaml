@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:11.4.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+          - mountPath: /etc/grafana
+            name: graf-conf
+          - mountPath: /var/lib/grafana
+            name: graf-data
+        env:
+          - name: GF_SECURITY_ADMIN_USER
+            value: admin
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: admin
+      volumes:
+        - name: graf-conf
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/Grafana_Conf"
+        - name: graf-data
+          nfs:
+            server: 192.168.1.12
+            path: "/var/data/Grafana_Data"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-ip-service
+spec:
+  selector:
+    app: grafana
+  ports:
+  - protocol: TCP
+    port: 3000
+    nodePort: 30439
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: grafana-cluster-ip-service
+spec:
+ type: ClusterIP
+ selector:
+  app: grafana
+ ports:
+  - name: grafana
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
