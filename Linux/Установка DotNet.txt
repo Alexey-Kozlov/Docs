@@ -1,0 +1,4 @@
+ставим среду выполнения:
+
+yay -S aspnet-runtime-bin
+yay -S dotnet-sdk-bin
