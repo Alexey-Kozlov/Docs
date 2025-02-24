@@ -137,10 +137,24 @@ spec:
             name: auction-front-clusterip
             port:
               number: 80
+      - pathType: ImplementationSpecific
+        path: /reports
+        backend:
+          service:
+            name: auction-front-reports-clusterip
+            port:
+              number: 80
       - path: /api/?(.*)
         pathType: ImplementationSpecific
         backend:
          service:
           name: auction-gateway-clusterip
+          port:
+           number: 80
+      - path: /api/reports/?(.*)
+        pathType: ImplementationSpecific
+        backend:
+         service:
+          name: auction-api-reports-clusterip
           port:
            number: 80

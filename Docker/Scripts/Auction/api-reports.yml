@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-api-reports
+spec:
+  selector:
+    matchLabels:
+      app: auction-api-reports
+  template:
+    metadata:
+      labels:
+        app: auction-api-reports
+    spec:
+      containers:
+      - name: auction-api-reports
+        image: kozlovas/auction-api-reports
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: ASPNETCORE_URLS
+            value: "http://+:80"
+          - name: AuctionServiceUrl
+            value: http://auction-search-clusterip/api/search/GetAuctionItemsByQuery
+          - name: BidServiceUrl
+            value: http://auction-bid-clusterip/api/bids/GetBidItemsByQuery
+          - name: NotifyServiceUrl
+            value: http://auction-notify-clusterip/notifications/items/GetNotifyItemsByQuery
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-api-reports-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-api-reports
+  ports:
+  - port: 80
+    targetPort: 80
+

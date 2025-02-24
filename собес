@@ -2,45 +2,48 @@
 сравнение переменных - по значению и адресу, коллекции, Generics (constraints), делегаты, расширения, кортежи (tuple), records
 boxing- unboxing, worker:BackgroundService (реализует IHostedService)
 наследование - перегрузка, переопределение (запрет - sealed), замещение или скрытие, абстрактные классы и методы
-
-Многопоточность и асинхронность (Task и void в асинхронном вызове)
-DI, Паттерны и SOLID
+Слабое связывание - изменение участка кода оказывало как можно меньшее влияние на остальной код.
+Многопоточность и асинхронность (Task и void в асинхронном вызове), асирнхронность - в основе однопоточная событийная модель (шаблон react)
+DI (если в DI класс - это слабое связывание? Если базовый    класс - да), Паттерны и SOLID
 Безопасность, JWT, CORS
 Конвейер, порядок объявления сервисов
 Спецификации webapi - rest, graphql, grpc, soap
 ORM, IQurable IEnumerable, (WithTracking, AsNoTracking)
 БД - реляционные, документарные, индексы, оптимизация, триггеры, транзакции (SavePoint),vacuum, join->left join, Constraints, нормализация
-Виды соединений (nested loop, merge, hash), селективность, план выполнения, parameter sniffing, CTE, оконные функции -> OVER (Partition by .. Order by) row_number(), View & Materialized View
+Виды соединений (nested loop, merge, hash), селективность (частота нахождения >30% - индекс отключается), план выполнения, parameter sniffing, CTE, оконные функции -> OVER (Partition by .. Order by) row_number(), View & Materialized View
 
-Сервисные брокеры - Rabbit, MassTransit (идемпотентность),  Kafka, Redis
-Kubernetes
+Сервисные брокеры - Rabbit, MassTransit (идемпотентность),  Kafka, Redis, контейнеризация (Kubernetes, OpenShift)
 Архитектуры - Монолит, сервис-ориентированная архитектура, Микросервисы, Чистая архитектура, CQRS, Event Sourcing
 
 Фронт
-TypeScript - стрелочная  ф-я и this, чистая функция, прототипы, null и undefined,  interface vs type,
-promise, промисификация, обертка асинхронной функции вокруг промиса, вызывается как синхронная, замыкания, EventLoop,
+TypeScript - стрелочная  ф-я и this, чистая функция - не имеет побочных эффкетов (когда функция вызывает любой внешний код) и одинаковый ответ на одинаковый входящий набор данных, прототипы, null и undefined - оба разные типы, null - значение,отсутсиве объекта, undefined - отсутствие значения;
+interface vs type - интерфейсы - можно делать слияние инфтерфейсов, также множественное наследования (extends),
+promise - содержит 3 состояния - (pending, fulfilled, rejected), промисификация, обертка асинхронной функции вокруг промиса, вызывается как синхронная, замыкания, EventLoop,
 (bind,call,apply - bind - обертка, отложенный вызов, call - замена this,перечисление аргументов; apply - тоже,передается список переменных)
 
 React
-props, readonly props, drill up и drill down, deep copy и shallow copy, structuredClone, useState (прямое обновление и updater function), useEffect (однократное выполнение хука), useParams, useNavigate (прямая ссылка window.location.href), Redux
+props, readonly props, drill up и drill down, deep copy и shallow copy, structuredClone, useState (прямое обновление и updater function), useEffect (однократное выполнение хука), useParams, useNavigate (прямая ссылка window.location.href)
+
+Redux - централизованное хранилище состояний, состояния - readonly, всегда создается новый объект состояний, передаются actions (состоит из типа действия - type и payload) с помощью dispatch в reducer(чистая функция), reducer изменяет состояние, компоненты подписываются на состояния. в ReduxToolkit - нет подписок, там получение данных - useSelector и использование в компонентах
 
 Angular
-state, NgRx - это Redux для Ангуляр, action -> reducer(чистая функция)
-binding - интерполяция {{}}, property (к значениям), к событиям, dom -> angular(или атрибуту), 2 way (ngmodel)
-@NgModule - центральный элемент для описания других модулей (imports и exports), провайдеры сервисов, загрузочный модкль - bootstrap
+NgRx - это Redux для Ангуляр,
+binding - интерполяция {{}}, property (к значениям или свойствам), к событиям - {click}, 2 way (ngmodel)
+@NgModule - центральный элемент для описания других модулей (imports и exports), провайдеры сервисов,
+ng-content в child-компоненте - темплейт для передачи разментки из парент в child
 автономные компоненты -> @Component standalone:true, плюсы и минусы
 цикл, директива track - указывает на уникальный ключ
 декоратор @input - получать значения из родительского компонента
 декоратор @output - передача события внешнему компоненту через объект EventEmitter, emit - метод передачи
-структурные директивы ngIf, ngFor - звездочка - добавляет ng-template
-
+структурные директивы *ngIf, *ngFor - звездочка Это синтаксический сахар - неявно добавляет ng-template
 сервисы - предоставление данных, вынос логики, взаимодействие между компонентами
 определение сервиса - директива @injectable, гарантирует что объект может быть создан и передан как зависимость
 применение сервиса -  import, добавить в коллекцию Providers, вызвать через DI в конструкторе
+объект HttpClient, метод get возвращает Observable<Object>, для получения данных используем метод subscribe этого объекта
 различия в применении сервиса Srv и просто New Srv - сервис тот же самый, new - новый инстанс
 injection hierarchy
 
-RxJs - stream-like flows, эмиттер (observable, data sources), subscriber(observer или listener).
+RxJs - дополнительные возможноти запросов, реализует pipe (постобработка), map (перебор элементов массива), обработку ошибок,
 observer может слушать события - data, errors, completeon.
 
 Pipes (operators),maps - форматирование и преобразование значений, может служить как слой междку observable и observer
