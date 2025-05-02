@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
         - name: vault
-          image: hashicorp/vault:1.19
+          image: hashicorp/vault:1.18.0
           imagePullPolicy: IfNotPresent
           command: ["vault", "server","-config", "/vault/config/config.hcl" ]
           env:

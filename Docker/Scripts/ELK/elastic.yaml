@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: elastic
-        image: elasticsearch:8.17.3
+        image: elasticsearch:8.17.4
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9200

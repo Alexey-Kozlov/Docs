@@ -1,1 +1,1 @@
-docker run --name redis -p 6379:6379 -d redis:8.0-M02
+docker run --name redis -p 6379:6379 -d redis:8.0-rc1-bookworm

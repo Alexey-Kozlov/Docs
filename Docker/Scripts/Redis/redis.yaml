@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: redis:8.0-M02
+        image: redis:8.0-rc1-bookworm
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 6379

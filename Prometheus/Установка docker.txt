@@ -1,5 +1,5 @@
 
-docker pull prom/prometheus:v3.0.1
+docker pull prom/prometheus:v3.3.0-rc.1
 
 установка (SSH)
 
@@ -13,14 +13,14 @@ docker volume create --driver vieux/sshfs -o sshcmd=alex@192.168.1.12:/home/alex
 
 Запускаем контейнер:
 
-docker run -d --name prometheus -v Prometheus_Local_Conf:/etc/prometheus -v Prometheus_Local_Data:/prometheus -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
+docker run -d --name prometheus -v Prometheus_Local_Conf:/etc/prometheus -v Prometheus_Local_Data:/prometheus -p 9090:9090 prom/prometheus:v3.3.0-rc.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
 
 
 
 установка (NFS)
 
-docker run -d --name prometheus --mount 'type=volume,source=Prometheus_Local_Conf,target=/etc/prometheus,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/Prometheus_Local_Conf,"volume-opt=o=addr=192.168.1.12,ro,nfsvers=4,async"' --mount 'type=volume,source=Prometheus_Local_Data,target=/prometheus,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/Prometheus_Local_Data,"volume-opt=o=addr=192.168.1.12,rw,nfsvers=4"' -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
+docker run -d --name prometheus --mount 'type=volume,source=Prometheus_Local_Conf,target=/etc/prometheus,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/Prometheus_Local_Conf,"volume-opt=o=addr=192.168.1.12,ro,nfsvers=4,async"' --mount 'type=volume,source=Prometheus_Local_Data,target=/prometheus,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/Prometheus_Local_Data,"volume-opt=o=addr=192.168.1.12,rw,nfsvers=4"' -p 9090:9090 prom/prometheus:v3.3.0-rc.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
 
 установка (маппинг)
 
-docker run -d --name prometheus --mount type=bind,source=/home/alex/data/Prometheus_Local_Conf,target=/etc/prometheus --mount type=bind,source=/home/alex/data/Prometheus_Local_Data,target=/prometheus -p 9090:9090 prom/prometheus:v3.0.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml
+docker run -d --name prometheus --mount type=bind,source=/home/alex/data/Prometheus_Local_Conf,target=/etc/prometheus --mount type=bind,source=/home/alex/data/Prometheus_Local_Data,target=/prometheus -p 9090:9090 prom/prometheus:v3.3.0-rc.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml

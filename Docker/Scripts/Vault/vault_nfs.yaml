@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: vault
-          image: hashicorp/vault:1.18
+          image: hashicorp/vault:1.18.0
           imagePullPolicy: IfNotPresent
           command: ["vault", "server","-config", "/vault/config/config.hcl" ]
           env:
@@ -32,11 +32,11 @@ spec:
         - name: conf
           nfs:
             server: 192.168.1.12
-            path: "/var/data/Vault_Conf"
+            path: "/home/alex/data/Vault_Conf"
         - name: data
           nfs:
             server: 192.168.1.12
-            path: "/var/data/Vault_Data"
+            path: "/home/alex/data/Vault_Data"
 ---
 apiVersion: v1
 kind: Service

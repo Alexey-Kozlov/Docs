@@ -17,9 +17,7 @@ spec:
         image: kozlovas/auction-logging
         imagePullPolicy: IfNotPresent
         env:
-          - name: Kestrel__Endpoints__WebApi__Protocols
-            value: Http1
-          - name: Kestrel__Endpoints__WebApi__Url
+          - name: ASPNETCORE_URLS
             value: http://+:80
 ---
 apiVersion: v1
@@ -33,4 +31,3 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-    name: web

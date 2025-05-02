@@ -155,6 +155,6 @@ spec:
         pathType: ImplementationSpecific
         backend:
          service:
-          name: auction-api-reports-clusterip
+          name: auction-gateway-clusterip
           port:
            number: 80
