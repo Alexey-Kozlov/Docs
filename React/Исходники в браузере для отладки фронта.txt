@@ -1,0 +1,10 @@
+Для отладки в браузере, если на вкладке "Sources" нет исходников - в хроме открыть разработку, щелкнуть "шестерню" - зайдем в Settings. Далее в разделе "Sources" включить "Javascript source map" и "Allow devtools to load resources,...."
+
+Если будут пердупреждения вроде - "Failed to parse source map from ..." - это можно удалить,
+правим в package.json раздел запуска сервера - добавляем флаг GENERATE_SOURCEMAP=false :
+	"scripts": {
+		"start": "GENERATE_SOURCEMAP=false PORT=3000 react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
