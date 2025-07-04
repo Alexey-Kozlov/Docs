@@ -113,8 +113,8 @@ mkinitcpio -p linux
 обновляем конфиг
 grub-mkconfig -o /boot/grub/grub.cfg
 
-ставим графику:
-pacman -S xorg plasma
+ставим графику и главные пакеты:
+pacman -S xorg plasma konsole dolphin
 
 активизируем сервис Display Manager:
 systemctl enable sddm.service
