@@ -1,6 +1,6 @@
 Open Telemetry Collector, запуск в docker
 
-docker pull otel/opentelemetry-collector-contrib:0.115.1
+docker pull otel/opentelemetry-collector-contrib:0.129.1
 
 установка (SSH)
 
@@ -12,7 +12,7 @@ docker volume create --driver vieux/sshfs -o sshcmd=alex@192.168.1.12:/home/alex
 
 Запускаем контейнер:
 
-docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d -v OTC_Local_Conf:/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.115.1
+docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d -v OTC_Local_Conf:/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.129.1
 
 ----------------------------------------------
 
@@ -24,4 +24,4 @@ docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 5
 
 установка (маппинг)
 
-docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d --mount type=bind,source=~/data/OTC_Local_Conf,target=/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.115.1
+docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d --mount type=bind,source=~/data/OTC_Local_Conf,target=/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.129.1

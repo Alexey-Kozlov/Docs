@@ -1,4 +1,4 @@
 
-docker pull grafana/grafana
+docker pull grafana/grafana:12.0.2
 
-docker run -d --name grafana -p 9000:3000 -e GF_SECURITY_ADMIN_USER=admin -e GF_SECURITY_ADMIN_PASSWORD=admin --mount source=Grafana_Local_Data,target=/var/lib/grafana --mount source=Grafana_Local_Conf,target=/etc/grafana grafana/grafana:11.4.0
+docker run -d --name grafana -p 9000:3000 -e GF_SECURITY_ADMIN_USER=admin -e GF_SECURITY_ADMIN_PASSWORD=admin -v /files/data/Grafana_Local:/var/lib/grafana grafana/grafana:12.0.2

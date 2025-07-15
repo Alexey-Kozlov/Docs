@@ -2,7 +2,7 @@
 
 Скачиваем образ
 
-docker pull ghcr.io/lrstanley/vault-unseal:latest
+docker pull ghcr.io/lrstanley/vault-unseal:0.7.2
 
 Копируем файл vault-unseal.yaml конфигурации  в Vault_Unseal_Local
 
@@ -10,7 +10,7 @@ docker pull ghcr.io/lrstanley/vault-unseal:latest
 
 Делаем правильный доступ к смонтированному тому
 
-sudo chmod 0600 -R /home/alex/data/Vault_Unseal_Local/vault-unseal-conf.yaml
+sudo chmod 0600 -R /files/data/Vault_Unseal_Local/vault-unseal.yaml
 
 
 
@@ -31,7 +31,7 @@ docker run --name vault-unseal --mount 'type=volume,source=Vault_Unseal_Local,ta
 
 Запускаем контейнер (маппинг)
 
-docker run --name vault-unseal -v /home/alex/data/Vault_Unseal_Local:/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal.yaml -d ghcr.io/lrstanley/vault-unseal:latest
+docker run --name vault-unseal -v /files/data/Vault_Unseal_Local:/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal.yaml -d ghcr.io/lrstanley/vault-unseal:0.7.2
 
 Ждем 10 секунд, проверяем разблокировку по адресу - http://localhost:8200/
 Должна смениться надпись на разблокировку на ввод токена, статус должен стать "Unsealed"
