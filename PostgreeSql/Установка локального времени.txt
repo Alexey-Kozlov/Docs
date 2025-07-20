@@ -1,0 +1,22 @@
+Изначально устанолвено время по Гринвичу, т.е. смещение в 0 часов.
+Нам нужно Московское время. т.е. +3 часа
+
+Нужно сделать настройки для каждой БД
+Сначала находим нужный часовой пояс для установки, запросом -
+SELECT * FROM pg_timezone_names
+
+Для Москвы -
+SELECT * FROM pg_timezone_names where name like '%Moscow%'
+
+Теперь для каждой БД выполняем запрос:
+ALTER DATABASE "AuctionsBids" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsCommunications" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsEventSourcing" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsFinance" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsIdentity" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsImages" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsNotifications" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsProcessing" SET timezone TO 'Europe/Moscow';
+ALTER DATABASE "AuctionsSearch" SET timezone TO 'Europe/Moscow';
+
+Потом нуэно обновить сессию уоннекта к БД, теперь должно быть локальное время
