@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: rabbitmq
-        image: rabbitmq:4.1.0-management-alpine
+        image: rabbitmq:4.1.2-management-alpine
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 25672

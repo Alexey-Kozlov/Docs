@@ -1,0 +1,34 @@
+Если не запускается под -
+
+снпчала получаем список подов, ищем сбойный -
+
+kubectl get pod
+
+У нормальный статус - Running, у не нормальных - Error или CrashLoopBackOff
+
+Находим что-то вроде -
+otc-0       0/1     CrashLoopBackOff
+
+далее смотрим его лог:
+
+kubectl logs <имя пода>
+
+Например - Kubectk logs otc-0
+Будет ошибка при запуске
+
+Можно просмотреть статус пода:
+kubectl describe pod <имя пода>
+
+Например - kubectl describe pod otc
+
+или (если это Statefulset) - статус Statefulset:
+kubectl describe statefulset <имя пода>
+
+Например - kubectl describe statefulset otc
+
+Если падает под и запускается новый, в упавшем можно просмотреть лог перед смертью так:
+docker logs <Container ID>
+
+например - docker logs f447be03e448bb778f392327c3630b40771a67d613d9f9a2573d92a137ffc34f
+
+эта команда также работает и с живым подом, наравне с kubectl logs <имя пода>

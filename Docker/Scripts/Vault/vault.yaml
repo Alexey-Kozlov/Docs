@@ -12,7 +12,7 @@ spec:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /host_mnt/home/alex/data/Vault_Data
+    path: /host_mnt/files/data/Vault_Data
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -43,7 +43,7 @@ spec:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /host_mnt/home/alex/data/Vault_Conf
+    path: /host_mnt/files/data/Vault_Conf
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -79,17 +79,17 @@ spec:
           image: hashicorp/vault:1.18.0
           imagePullPolicy: IfNotPresent
           command: ["vault", "server","-config", "/vault/config/config.hcl" ]
-          env:
-            - name: VAULT_ADDR
-              value: http://localhost:8200
-          ports:
-            - containerPort: 8200
-            - containerPort: 8201
           volumeMounts:
             - mountPath: /vault/data
               name: data
             - mountPath: /vault/config
               name: conf
+          env:
+            - name: VAULT_ADDR
+              value: http://vault-cluster-ip-service:8200
+          ports:
+            - containerPort: 8200
+            - containerPort: 8201
       volumes:
       - name: data
         persistentVolumeClaim:

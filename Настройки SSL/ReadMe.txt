@@ -1,7 +1,11 @@
 1. Установить утилиту mkcert:
+Windows -
 - запустить powershell из под админа
 - перейти в папку где будут храниться сертификаты
 - выполнить : choco install mkcert
+Linux -
+- yay -S mkcert
+
 - создать корневой CA сертификат : mkcert -install
 - создать сертификат для нужного хоста (или IP): mkcert -pkcs12 192.168.1.10
 важно - создастся сертификат с паролем "changeit"
@@ -20,6 +24,7 @@ mkcert -key-file ~/Certificates/certificates.key -cert-file ~/Certificates/certi
 проверяем:
 openssl x509 -noout -ext subjectAltName -in certificates.crt
 
+Если нужно для отладки:
 
 - в файле .env.development создать записи конфигурации реакта:
 

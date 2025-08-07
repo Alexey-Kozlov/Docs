@@ -12,7 +12,7 @@ spec:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /host_mnt/home/alex/data/ELK_Data
+    path: /host_mnt/files/data/ELK_Data
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -28,7 +28,7 @@ spec:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /host_mnt/home/alex/data/ELK_Conf
+    path: /host_mnt/files/data/ELK_Conf
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
       - name: elastic
-        image: elasticsearch:8.17.4
+        image: elasticsearch:9.0.2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9200

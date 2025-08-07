@@ -12,7 +12,7 @@ spec:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /host_mnt/home/alex/data/Kafka
+    path: /host_mnt/files/data/Kafka
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

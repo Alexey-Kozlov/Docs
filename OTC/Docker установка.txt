@@ -2,6 +2,10 @@ Open Telemetry Collector, запуск в docker
 
 docker pull otel/opentelemetry-collector-contrib:0.129.1
 
+В запамленную папку скопировать файл конфигурации config.yaml
+
+----------------------------------------
+
 установка (SSH)
 
 Должен быть  загружен плагин - docker plugin install vieux/sshfs

@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auction-finance
+  name: auction-communication
 spec:
   selector:
     matchLabels:
-      app: auction-finance
+      app: auction-communication
   template:
     metadata:
       labels:
-        app: auction-finance
+        app: auction-communication
     spec:
       containers:
-      - name: auction-finance
-        image: kozlovas/auction-finance
+      - name: auction-communication
+        image: kozlovas/auction-communication
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
@@ -26,11 +26,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auction-finance-clusterip
+  name: auction-communication-clusterip
 spec:
   type: ClusterIP
   selector:
-    app: auction-finance
+    app: auction-communication
   ports:
   - port: 80
     targetPort: 80

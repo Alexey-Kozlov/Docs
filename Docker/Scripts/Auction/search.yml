@@ -15,13 +15,13 @@ spec:
       - name: auction-search
         image: kozlovas/auction-search
         imagePullPolicy: IfNotPresent
-        env:
-          - name: ASPNETCORE_URLS
-            value: "http://+:80"
-          - name: RabbitMq__Host
-            value: rabbitmq-cluster-ip-service
-          - name: AuctionServiceUrl
-            value: http://auction-eventsourcing-clusterip
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /app/appsettings.json
+          initialDelaySeconds: 60
+          periodSeconds: 5
 ---
 apiVersion: v1
 kind: Service
@@ -34,4 +34,15 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-search-clusterip-grpc
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-search
+  ports:
+  - port: 7779
+    targetPort: 7779

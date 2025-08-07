@@ -16,7 +16,7 @@ spec:
    spec:
     containers:
     - name: elastic
-      image: elasticsearch:8.18.0
+      image: elasticsearch:9.0.2
       imagePullPolicy: IfNotPresent
       ports:
       - containerPort: 9200
@@ -37,12 +37,12 @@ spec:
     volumes:
     - name: mydata
       nfs:
-        server: 192.168.1.12
-        path: "/home/alex/data/ELK_Data"
+        server: 192.168.1.10
+        path: "/files/data/ELK_Data"
     - name: myconf
       nfs:
-        server: 192.168.1.12
-        path: "/home/alex/data/ELK_Conf"
+        server: 192.168.1.10
+        path: "/files/data/ELK_Conf"
 ---
 apiVersion: v1
 kind: Service

@@ -15,13 +15,13 @@ spec:
       - name: auction-notify
         image: kozlovas/auction-notification
         imagePullPolicy: IfNotPresent
-        env:
-          - name: ASPNETCORE_URLS
-            value: "http://+:80"
-          - name: RabbitMq__Host
-            value: rabbitmq-cluster-ip-service
-        ports:
-        - containerPort: 80
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /app/appsettings.json
+          initialDelaySeconds: 60
+          periodSeconds: 5
 ---
 apiVersion: v1
 kind: Service
@@ -34,3 +34,16 @@ spec:
   ports:
   - port: 80
     targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-notify-clusterip-grpc
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-notify
+  ports:
+  - port: 7781
+    targetPort: 7781
+    name: grpc

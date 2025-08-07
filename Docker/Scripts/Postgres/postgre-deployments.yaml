@@ -12,7 +12,7 @@ spec:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /host_mnt/home/alex/data/Postgres_Data
+    path: /host_mnt/files/data/Postgres_Data
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: postgre
-        image: postgres:17.4
+        image: postgres:17.5
         imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:

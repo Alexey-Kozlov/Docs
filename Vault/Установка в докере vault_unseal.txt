@@ -4,7 +4,7 @@
 
 docker pull ghcr.io/lrstanley/vault-unseal:0.7.2
 
-Копируем файл vault-unseal.yaml конфигурации  в Vault_Unseal_Local
+Копируем файл vault-unseal-conf.yaml конфигурации  в Vault_Unseal_Local
 
 Правим этот файл - записываем правильный токен для разблокировки в раздел unseal_tokens, токен берем из конфигурационного json из раздела "keys", должны быть 3 одинаковые записи токена
 
