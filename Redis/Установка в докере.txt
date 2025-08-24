@@ -1,3 +1,9 @@
+Если ставить только Редис, без UI:
 docker pull redis:8.0.3
-
 docker run --name redis -p 6379:6379 -d redis:8.0.3
+
+Если ставить Редис с UI:
+docker pull redis/redis-stack:7.4.0-v6
+docker run -d --name redis -p 6379:6379 -p 8082:8001 redis/redis-stack:7.4.0-v6
+
+В этом случае коннектиться для работы с редисом - localhost:8082
