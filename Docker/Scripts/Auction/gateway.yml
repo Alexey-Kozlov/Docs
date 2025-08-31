@@ -34,4 +34,15 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-gateway-clusterip-grpc
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-gateway
+  ports:
+  - port: 7782
+    targetPort: 7782
