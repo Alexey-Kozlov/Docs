@@ -11,11 +11,11 @@ private internet access
 device list
 station wlan0 scan
 station wlan0 get-networks
-station wlan0 connect DIR-X1530-ADD5
+station wlan0 connect DIR-X1530-5G-ADD5
 exit
 
 делаем разделы
-просмотр разделов - lsblk
+просмотр разделов - lsblk (или lsblk -f   - подробно)
 cfdisk /dev/nvme1n1
 cfdisk /dev/nvme0n1
 правим разделы этой утилитой, список разделов:
@@ -74,17 +74,20 @@ locale-gen
 echo "FONT=cyr-sun16" > /etc/vconsole.conf
 
 наименование компа
-vim /etc/hostname  - указываем в первой строке наименование компа- arc
-:w <Enter> :q
+vim /etc/hostname
+<Insert>
+указываем в первой строке наименование компа- arc
+<Esc>
+:w <Enter> :q <Enter>
 
 правим hosts:
 
 vim /etc/hosts
-
+<Insert>
 127.0.0.1  localhost
 ::1        localhost
 127.0.0.1  arc.localdomain arc
-
+<Esc>
 :w  <Enter> :q
 
 ставим пароль на root:
@@ -107,11 +110,65 @@ visudo
 
 Ставим  загрузчик:
 pacman -S grub efibootmgr
+
+-------------------------------------
+если ставим только Linux:
+
 grub-install /dev/nvme1n1 --efi-dir=/efi
 пересобираем загрузчик
 mkinitcpio -p linux
 обновляем конфиг
 grub-mkconfig -o /boot/grub/grub.cfg
+
+--------------------------------------
+если ставим Linux после винды - для двойной загрузки:
+
+ставим os-prober:
+pacman -S os-prober
+правим загрузчик Grub:
+vim /etc/default/grub
+в открытом файле раскомментировать последнюю строку:
+GRUB_DISABLE_OS_PROBER=false
+сохранить
+
+Перегружаем!
+
+Проверяем разделы:
+lsblk -f
+должна быть структура:
+первые 3 раздела - винда:
+- nvme0n1p1 - раздел efi - FAT32
+- nvme0n1p2 - служебный раздел
+- nvme0n1p3 - основной раздел - ntfs
+дальше 3 раздела Linux:
+- nvme0n1p4 - раздел efi - FAT32
+- nvme0n1p5 - раздел с файлом подкачки - SWAP
+- nvme0n1p6 - основной раздел - ext4
+
+Монтируем:
+mkdir /mnt/boot
+mount /dev/nvme0n1p6 /mnt
+mount /dev/nvme0n1p4 /mnt/boot
+
+заходим в root:
+arch-chroot /mnt
+проверяем - утилита os-prober должна найти винду:
+os-prober
+длжен быть вывод - что найден загрузчик винды
+компилируем и правим загрузчик:
+mkinitcpio -p linux
+обновляем конфиг
+grub-mkconfig -o /boot/grub/grub.cfg
+смотрим на вывод - сначала должен быть вывод что найден linux, несколько строк
+затем - что запущена утилита os-prober и найдена винда
+
+Проверяем, что получилось в Grub:
+vim /boot/grub/grub.cfg
+там в конце скрипта должен быть раздел о загрузке обычного и продвинутого Линукса и о загрузке винды.
+
+------------------------------------------------
+
+Продолжение установки:
 
 ставим графику и главные пакеты:
 pacman -S xorg plasma konsole dolphin
@@ -119,4 +176,5 @@ pacman -S xorg plasma konsole dolphin
 активизируем сервис Display Manager:
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
+
 перегружаем, все
