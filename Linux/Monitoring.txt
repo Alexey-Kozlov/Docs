@@ -1,4 +1,0 @@
-Просмотр открытых портов:
-
-sudo netstat -tulpn | grep LISTEN
-sudo netstat -plten

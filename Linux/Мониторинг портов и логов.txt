@@ -1,0 +1,15 @@
+Просмотр открытых портов:
+
+sudo netstat -tulpn | grep LISTEN
+sudo netstat -plten
+
+
+
+Просмотр системных логов:
+journalctl - вывод всего лога, нет смысла - очень много записей
+
+вывод логов по конкретному сервису, напрмиер - по сервису Logrotate:
+journalctl -u logrotate.service
+
+вывод логов по поиску заданной строки:
+journalctl | grep logrotate

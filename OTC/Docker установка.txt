@@ -28,4 +28,4 @@ docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 5
 
 установка (маппинг)
 
-docker run --name otc -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 13133:13133 -p 55679:55679 -d --mount type=bind,source=~/data/OTC_Local_Conf,target=/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.129.1
+docker run --name otc -p 1888:1888 -p 8888:8888 -p 8889:8889 -p 4317:4317 -p 4318:4318 -p 13133:13133 -p 55679:55679 -d --mount type=bind,source=/files/data/OTC_Local_Conf,target=/etc/otelcol-contrib otel/opentelemetry-collector-contrib:0.135.0

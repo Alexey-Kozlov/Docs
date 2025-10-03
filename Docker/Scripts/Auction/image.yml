@@ -35,4 +35,15 @@ spec:
   - port: 7778
     targetPort: 7778
     name: grpc
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-image-clusterip-http
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-image
+  ports:
+  - port: 80
+    targetPort: 80
