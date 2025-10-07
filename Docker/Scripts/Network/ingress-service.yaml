@@ -19,6 +19,13 @@ spec:
     - graphql
     - auction
     - redmango
+    - grafana
+    - prometheus
+    - redis
+    - elk
+    - kafka
+    - rabbit
+    - vault
     secretName: my-cert
  rules:
   - host: reactivities
@@ -158,3 +165,73 @@ spec:
           name: auction-gateway-clusterip
           port:
            number: 80
+  - host: prometheus
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: prometheus-cluster-ip-service
+            port:
+              number: 9090
+  - host: grafana
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: grafana-cluster-ip-service
+            port:
+              number: 3000
+  - host: elk
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: kibana-service
+            port:
+              number: 5601
+  - host: kafka
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: kafkaui-cluster-ip-service
+            port:
+              number: 8080
+  - host: rabbit
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: rabbitmq-management-ip-service
+            port:
+              number: 15672
+  - host: redis
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: redis-ip-service
+            port:
+              number: 8001
+  - host: vault
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: vault-cluster-ip-service
+            port:
+              number: 8200

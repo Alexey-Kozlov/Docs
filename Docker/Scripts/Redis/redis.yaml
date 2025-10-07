@@ -37,13 +37,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redisui-ip-service
+  name: redis-ip-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: redis
   ports:
-  - protocol: TCP
+  - name: redis
+    protocol: TCP
     port: 8001
-    nodePort: 30442
+    targetPort: 8001
 
