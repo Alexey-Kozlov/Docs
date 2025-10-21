@@ -16,7 +16,7 @@ spec:
    spec:
     containers:
     - name: elastic
-      image: elasticsearch:9.0.2
+      image: elasticsearch:9.1.5
       imagePullPolicy: IfNotPresent
       ports:
       - containerPort: 9200

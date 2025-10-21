@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: postgre
-        image: postgres:17.5
+        image: postgres:18.0
         imagePullPolicy: IfNotPresent
         envFrom:
         - configMapRef:
@@ -58,7 +58,7 @@ spec:
         - containerPort: 5432
           name: postgre
         volumeMounts:
-        - mountPath: /var/lib/postgresql/data
+        - mountPath: /var/lib/postgresql/18/docker
           name: postgres-storage
       volumes:
       - name: postgres-storage

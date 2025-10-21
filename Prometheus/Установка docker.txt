@@ -1,5 +1,5 @@
 
-docker pull prom/prometheus:v3.6.0
+docker pull prom/prometheus:v3.7.1
 
 в замапленную папку конфига копируем файл prometheus.yml
 
@@ -29,4 +29,4 @@ docker run -d --name prometheus --mount 'type=volume,source=Prometheus_Local_Con
 
 установка (маппинг)
 
-docker run -d --name prometheus --mount type=bind,source=/files/data/Prometheus_Local_Conf,target=/etc/prometheus --mount type=bind,source=/files/data/Prometheus_Local_Data,target=/prometheus -p 9090:9090 prom/prometheus:v3.6.0 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml --web.enable-otlp-receiver
+docker run -d --name prometheus --mount type=bind,source=/files/data/Prometheus_Local_Conf,target=/etc/prometheus --mount type=bind,source=/files/data/Prometheus_Local_Data,target=/prometheus -p 9090:9090 prom/prometheus:v3.7.1 --storage.tsdb.retention.time=1d --config.file=/etc/prometheus/prometheus.yml --web.enable-otlp-receiver
