@@ -1,0 +1,32 @@
+Для отключения мониторинга эластика (если его включили),
+выполнить в Кибане команду:
+
+PUT _cluster/settings
+{
+  "persistent": {
+    "xpack.monitoring.collection.enabled": null
+  },
+  "transient": {
+    "xpack.monitoring.collection.enabled": null
+  }
+}
+
+Проверяем:
+
+GET _cluster/settings?include_defaults&filter_path=defaults.xpack.monitoring.collection.enabled
+
+Должно быть -
+
+{
+  "defaults": {
+    "xpack": {
+      "monitoring": {
+        "collection": {
+          "enabled": "false"
+        }
+      }
+    }
+  }
+}
+
+Затем удаляем индексы мониторинга, перегружаем эластик - больше индексы не должны создаваться и мониторинг не должен быть доступен.

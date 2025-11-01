@@ -15,13 +15,15 @@ spec:
       - name: auction-bid
         image: kozlovas/auction-bidding
         imagePullPolicy: IfNotPresent
-        livenessProbe:
-          exec:
-            command:
-            - cat
-            - /app/appsettings.json
-          initialDelaySeconds: 60
-          periodSeconds: 5
+        startupProbe:
+          httpGet:
+            path: /checkvault
+            port: 80
+            scheme: HTTP
+            host: 10.108.29.192
+          failureThreshold: 60
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources:
           limits:
             cpu: "1"

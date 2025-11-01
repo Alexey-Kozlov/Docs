@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-checkvault
+spec:
+  selector:
+    matchLabels:
+      app: auction-checkvault
+  template:
+    metadata:
+      labels:
+        app: auction-checkvault
+    spec:
+      containers:
+      - name: auction-checkvault
+        image: kozlovas/auction-checkvault
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "1"
+          requests:
+            cpu: "0.5"
+        env:
+          - name: Vault__Token
+            value: "hvs.vLURpfFPBbgFJ8iOtT5XFj7C"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-checkvault-clusterip
+spec:
+  type: ClusterIP
+  clusterIP: 10.108.29.192
+  selector:
+    app: auction-checkvault
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: auction-checkvault-node
+ labels:
+   app: auction-checkvault-node
+spec:
+ selector:
+  app: auction-checkvault
+ type: NodePort
+ ports:
+  - port: 80
+    nodePort: 30443
