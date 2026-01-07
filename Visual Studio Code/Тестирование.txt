@@ -1,8 +1,51 @@
 Создаем проект с использованием xUnit
 
 Создаем класс, нужный метод помечаем - [Fact]
+
+Необходимые условия, чтобы тестовые методы были найдены средой VS Code
+1. В файле .csproj должны быть пакеты:
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+
+2. Если не используется Main - тестовые методы должны быть описаны в запускающем классе
+
+Если нужно вынести тестовые методы в отдельные классы - оформляем запускающий метод в виде Main:
+
+public class Program
+{
+    public static void Main()
+    {
+        //бла бла бла
+        WriteLine("Press enter to exit.");
+    }
+}
+
+и тестовый класс:
+
+using Xunit;
+
+public class DebugLibraryTests
+{
+    [Fact]
+    public void WebConfigPropertiesInstantiated()
+    {
+        Assert.NotNull(config.JsonWebToken);
+    }
+}
+
+Если есть несколько классов с методом Main - указываем нужный класс в файле конфигурации .csproj, там должен быть параметр с наименованием запускаемого класса (например, чтобы запускался метод Main из класса Program):
+
+<PropertyGroup>
+    <StartupObject>Program</StartupObject>
+</PropertyGroup>
+
+
 На закладке слева - где колба - вверху нажать "Обновить" - для пересканирования проектов и нахождения тестовых методов.
-Должны появится тетовые методы.
+Должны появится тестовые методы.
 
 Чтобы работал вывод в консоль.
 
