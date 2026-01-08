@@ -1,0 +1,11 @@
+проверка установленных версий:
+dotnet --list-sdks
+dotnet --list-runtimes
+
+Общая информация по установленному .Net:
+dotnet --info
+
+Если нет нужной версии (например 9), то устанавливаем так:
+yay -S dotnet-sdk-9.0-bin
+yay -S dotnet-runtime-9.0-bin
+yay -S aspnet-runtime-9.0-bin
