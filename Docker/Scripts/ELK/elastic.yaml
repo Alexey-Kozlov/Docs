@@ -1,64 +1,35 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-elk-data
+  name: pv-elk
   labels:
-    name: pv-elk-data
+    name: pv-elk
+    type: local
 spec:
-  storageClassName: hostpath
+  storageClassName: manual
   capacity:
     storage: 20Gi
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteOncePod
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /host_mnt/files/data/ELK_Data
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv-elk-conf
-  labels:
-    name: pv-elk-conf
-spec:
-  storageClassName: hostpath
-  capacity:
-    storage: 1Gi
-  accessModes:
-  - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /host_mnt/files/data/ELK_Conf
+    path: "/files/data/ELK"
+    type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-elk-data
+  name: pvc-elk
 spec:
-  storageClassName: hostpath
+  storageClassName: manual
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOncePod
   resources:
     requests:
-      storage: 1Gi
+      storage: 20Gi
   selector:
     matchLabels:
-      name: pv-elk-data
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: pvc-elk-conf
-spec:
-  storageClassName: hostpath
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  selector:
-    matchLabels:
-      name: pv-elk-conf
+      name: pv-elk
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -78,16 +49,14 @@ spec:
     spec:
       containers:
       - name: elastic
-        image: elasticsearch:9.0.2
+        image: elasticsearch:9.2.4
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 9200
-          name: elastic
+          - containerPort: 9200
+            name: elastic
         volumeMounts:
-        - mountPath: /usr/share/elasticsearch/data
-          name: elastic-data
-        - mountPath: /usr/share/elasticsearch/config
-          name: elastic-conf
+          - mountPath: "/usr/share/elasticsearch/config"
+            name: elastic-data
         resources:
           limits:
             memory: 4Gi
@@ -97,12 +66,9 @@ spec:
         - name: ELASTIC_PASSWORD
           value: elastic
       volumes:
-      - name: elastic-conf
-        persistentVolumeClaim:
-          claimName: pvc-elk-conf
-      - name: elastic-data
-        persistentVolumeClaim:
-          claimName: pvc-elk-data
+        - name: elastic-data
+          persistentVolumeClaim:
+            claimName: pvc-elk
 ---
 apiVersion: v1
 kind: Service

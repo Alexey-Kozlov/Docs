@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: kibana:9.1.5
+        image: kibana:9.2.4
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5601
@@ -24,20 +24,16 @@ spec:
         env:
         - name: ELASTIC_CONTAINER
           value: "true"
+          name: KIBANA_SYSTEM_PASSWORD
+          value: kibana
         volumeMounts:
         - mountPath: /usr/share/kibana/config
           name: conf
-        - mountPath: /usr/share/kibana/data
-          name: data
       volumes:
       - name: conf
         nfs:
           server: 192.168.1.10
-          path: /files/data/Kibana_Conf
-      - name: data
-        nfs:
-          server: 192.168.1.10
-          path: /files/data/Kibana_Data
+          path: /files/data/Kibana
 ---
 apiVersion: v1
 kind: Service

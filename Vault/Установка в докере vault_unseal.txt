@@ -10,8 +10,16 @@ docker pull ghcr.io/lrstanley/vault-unseal:0.7.2
 
 Делаем правильный доступ к смонтированному тому
 
-sudo chmod 0600 -R /files/data/Vault_Unseal_Local/vault-unseal-conf.yaml
+sudo chmod 777 -R /files/data/Vault_Unseal_Local
+sudo chmod 0600 /files/data/Vault_Unseal_Local/vault-unseal-conf.yaml
 
+
+Запускаем контейнер (маппинг)
+
+docker run --name vault-unseal -v /files/data/Vault_Unseal_Local:/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal-conf.yaml -d ghcr.io/lrstanley/vault-unseal:0.7.2
+
+Ждем 10 секунд, проверяем разблокировку по адресу - http://localhost:8200/
+Должна смениться надпись на разблокировку на ввод токена, статус должен стать "Unsealed"
 
 
 Запускаем контейнер (SSH)
@@ -29,9 +37,4 @@ docker run --name vault-unseal --user $(id -u):$(id -g) -v Vault_Unseal_Local:/e
 
 docker run --name vault-unseal --mount 'type=volume,source=Vault_Unseal_Local,target=/etc,volume-driver=local,volume-opt=type=nfs,volume-opt=device=:/home/alex/data/Vault_Unseal_Local,"volume-opt=o=addr=192.168.1.12,ro,nfsvers=4"' -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal-conf.yaml -d ghcr.io/lrstanley/vault-unseal:latest
 
-Запускаем контейнер (маппинг)
 
-docker run --name vault-unseal -v /files/data/Vault_Unseal_Local:/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal-conf.yaml -d ghcr.io/lrstanley/vault-unseal:0.7.2
-
-Ждем 10 секунд, проверяем разблокировку по адресу - http://localhost:8200/
-Должна смениться надпись на разблокировку на ввод токена, статус должен стать "Unsealed"

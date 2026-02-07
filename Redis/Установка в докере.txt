@@ -1,6 +1,6 @@
 Если ставить только Редис, без UI:
-docker pull redis:8.2.2
-docker run --name redis -p 6379:6379 -d redis:8.2.2
+docker pull redis:8.4.0-alpine
+docker run --name redis -p 6379:6379 -d redis:8.4.0-alpine
 
 Если ставить Редис с UI:
 docker pull redis/redis-stack:7.4.0-v6
