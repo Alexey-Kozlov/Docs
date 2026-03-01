@@ -1,3 +1,34 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-grafana-data
+  labels:
+    name: pv-grafana-data
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /host_mnt/files/data/Grafana
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-grafana-data
+spec:
+  storageClassName: hostpath
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      name: pv-grafana-data
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -18,11 +49,18 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
+        volumeMounts:
+          - mountPath: /var/lib/grafana
+            name: graf-data
         env:
           - name: GF_SECURITY_ADMIN_USER
             value: admin
           - name: GF_SECURITY_ADMIN_PASSWORD
             value: admin
+      volumes:
+      - name: graf-data
+        persistentVolumeClaim:
+          claimName: pvc-grafana-data
 ---
 apiVersion: v1
 kind: Service

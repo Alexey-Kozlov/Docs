@@ -8,5 +8,5 @@ listener "tcp" {
 }
 ui = true
 cluster_addr  = "http://localhost:8201"
-api_addr      = "http://localhost:8200"
+api_addr      = "http://vault-cluster-ip-service:8200"
 disable_mlock = true
