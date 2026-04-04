@@ -3,7 +3,7 @@
 Сначала ставим основной сервис:
 
 Либо напрямую из Интернета (обновляются):
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.14.3/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.15.1/deploy/static/provider/cloud/deploy.yaml
 
 Либо из готового yaml-файла:
 /home/alex/Docs/Docker/Scripts/Network/ingress_deploy.yaml
