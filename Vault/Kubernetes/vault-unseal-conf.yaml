@@ -13,7 +13,7 @@ max_check_interval: 30m
 
 # list of vault nodes to check, must include http/https, and a port (unless 80/443).
 vault_nodes:
-  - http://host.docker.internal:8200
+  - http://vault-cluster-ip-service:8200
 
 # unseal tokens necessary to unseal any of the given vaults in the above node
 # list.
@@ -31,11 +31,10 @@ vault_nodes:
 #   * 2: BC
 #   * 3: AC
 unseal_tokens:
-  - 76ba75e7f77b2dad7d5587eba3670b463f55fef872339fd483e65bc52420d9f0
-  - 76ba75e7f77b2dad7d5587eba3670b463f55fef872339fd483e65bc52420d9f0
-  - 76ba75e7f77b2dad7d5587eba3670b463f55fef872339fd483e65bc52420d9f0
+  - b26beed6313531680158fd9267f81cab760516d1d656f831cd3c80b62d60283b
+  - b26beed6313531680158fd9267f81cab760516d1d656f831cd3c80b62d60283b
+  - b26beed6313531680158fd9267f81cab760516d1d656f831cd3c80b62d60283b
 
 # skip tls checks for the given vault instance. useful if your instance doesn't
 # have a certificate which has all of the server hostnames on it.
 tls_skip_verify: true
-tls_disable: true

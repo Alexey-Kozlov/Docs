@@ -4,7 +4,9 @@
 
 docker pull ghcr.io/lrstanley/vault-unseal:0.7.2
 
-Копируем файл vault-unseal-conf.yaml конфигурации  в Vault_Unseal_Local
+docker pull ghcr.io/lrstanley/vault-unseal:1.0.0-rc.0
+
+Копируем файлы vault-unseal-conf.yaml и файл resolv.conf конфигурации  в Vault_Unseal_Local
 
 Правим этот файл - записываем правильный токен для разблокировки в раздел unseal_tokens, токен берем из конфигурационного json из раздела "keys", должны быть 3 одинаковые записи токена
 
@@ -18,8 +20,13 @@ sudo chmod 0600 /files/data/Vault_Unseal_Local/vault-unseal-conf.yaml
 
 docker run --name vault-unseal -v /files/data/Vault_Unseal_Local:/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal-conf.yaml -d ghcr.io/lrstanley/vault-unseal:0.7.2
 
+docker run --name vault-unseal -v /files/data/Vault_Unseal_Local:/etc -e ALLOW_SINGLE_NODE=true -e CONFIG_PATH=/etc/vault-unseal-conf.yaml -d ghcr.io/lrstanley/vault-unseal:1.0.0-rc.0
+
 Ждем 10 секунд, проверяем разблокировку по адресу - http://localhost:8200/
 Должна смениться надпись на разблокировку на ввод токена, статус должен стать "Unsealed"
+
+
+
 
 
 Запускаем контейнер (SSH)

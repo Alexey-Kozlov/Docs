@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
         - name: vault-unseal
-          image: ghcr.io/lrstanley/vault-unseal:0.7.2
+          image: ghcr.io/lrstanley/vault-unseal:1.0.0-rc.0
           imagePullPolicy: IfNotPresent
           env:
             - name: ALLOW_SINGLE_NODE
