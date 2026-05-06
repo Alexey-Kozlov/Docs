@@ -9,3 +9,8 @@ dotnet --info
 yay -S dotnet-sdk-9.0-bin
 yay -S dotnet-runtime-9.0-bin
 yay -S aspnet-runtime-9.0-bin
+
+Удаление нужной версии
+sudo apt purge dotnet-sdk-9.0
+sudo apt purge dotnet-runtime-9.0
+sudo apt autoremove --purge

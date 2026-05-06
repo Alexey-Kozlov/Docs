@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: front
+ name: reactivities-front
 spec:
  replicas: 1
  selector:
   matchLabels:
-   component: front
+   component: reactivities-front
  template:
   metadata:
    labels:
-    component: front
+    component: reactivities-front
   spec:
    containers:
-    - name: front
+    - name: reactivities-front
       image: kozlovas/reactivities-front
       imagePullPolicy: IfNotPresent
       ports:
@@ -27,11 +27,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
- name: front-cluster-ip-service
+ name: reactivities-front-cluster-ip-service
 spec:
  type: ClusterIP
  ports:
   - port: 80
     targetPort: 80
  selector:
-  component: front
+  component: reactivities-front

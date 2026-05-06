@@ -35,21 +35,21 @@ spec:
         pathType: ImplementationSpecific
         backend:
          service:
-          name: front-cluster-ip-service
+          name: reactivities-front-cluster-ip-service
           port:
            number: 80
       - path: /api/?(.*)
         pathType: ImplementationSpecific
         backend:
          service:
-          name: api-cluster-ip-service
+          name: reactivities-api-cluster-ip-service
           port:
            number: 5001
       - path: /chat/?(.*)
         pathType: ImplementationSpecific
         backend:
          service:
-          name: api-cluster-ip-service
+          name: reactivities-api-cluster-ip-service
           port:
            number: 5001
   - host: redmango
